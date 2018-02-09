@@ -1,11 +1,10 @@
 #include <iostream>
-#include "defines.h"
+#include "defines.h"	// Contains all constants used
 
 #include "Box2D/Box2D.h"
-
 #include "avancezlib.h"
-#include "object_pool.h"
 
+#include "object_pool.h"
 #include "component.h"
 #include "game_object.h"
 

@@ -6,13 +6,13 @@ void GameObject::Create()
 {
 	SDL_Log("GameObject::Create");
 
-	enabled = false;
-	angle = 0;
+	m_enabled = false;
+	m_angle = 0;
 }
 
 void GameObject::AddComponent(Component * component)
 {
-	components.push_back(component);
+	m_components.push_back(component);
 }
 
 
@@ -20,25 +20,25 @@ void GameObject::Init()
 {
 	SDL_Log("GameObject::Init");
 
-	for (auto it = components.begin(); it != components.end(); it++)
-		(*it)->Init();
+	for (auto it : m_components)
+		it->Init();
 
-	enabled = true;
+	m_enabled = true;
 }
 
 void GameObject::Update(float dt)
 {
-	if (!enabled)
+	if (!m_enabled)
 		return;
 
-	for (auto it = components.begin(); it != components.end(); it++)
-		(*it)->Update(dt);
+	for (auto it : m_components)
+		it->Update(dt);
 }
 
 void GameObject::Destroy()
 {
-	for (auto it = components.begin(); it != components.end(); it++)
-		(*it)->Destroy();
+	for (auto it : m_components)
+		it->Destroy();
 }
 
 GameObject::~GameObject()
@@ -48,16 +48,16 @@ GameObject::~GameObject()
 
 void GameObject::AddReceiver(GameObject * go)
 {
-	receivers.push_back(go);
+	m_receivers.push_back(go);
 }
 
 void GameObject::Send(Message m)
 {
-	for (auto i = 0; i < receivers.size(); i++)
+	for (auto receiver : m_receivers)
 	{
-		if (!receivers[i]->enabled)
+		if (!receiver->m_enabled)
 			continue;
 
-		receivers[i]->Receive(m);
+		receiver->Receive(m);
 	}
 }

@@ -6,8 +6,8 @@
 
 class Sprite
 {
-	SDL_Renderer * renderer;
-	SDL_Texture * texture;
+	SDL_Renderer * m_renderer;
+	SDL_Texture * m_texture;
 
 public:
 
@@ -59,12 +59,12 @@ public:
 	void getKeyStatus(KeyStatus& keys);
 
 private:
-	SDL_Window * window;
-	SDL_Renderer * renderer;
+	SDL_Window * m_window;
+	SDL_Renderer * m_renderer;
 
-	TTF_Font* font;
+	TTF_Font* m_font;
 
-	KeyStatus key;
+	KeyStatus m_key;
 };
 
 

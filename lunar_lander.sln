@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab4", "lab4.vcxproj", "{493CEE3C-3A86-4999-BAE7-909C925FE922}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab4_hw", "lab4_hw\lab4_hw.vcxproj", "{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lunar_lander", "lunar_lander.vcxproj", "{493CEE3C-3A86-4999-BAE7-909C925FE922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,19 +21,11 @@ Global
 		{493CEE3C-3A86-4999-BAE7-909C925FE922}.Release|x64.Build.0 = Release|x64
 		{493CEE3C-3A86-4999-BAE7-909C925FE922}.Release|x86.ActiveCfg = Release|Win32
 		{493CEE3C-3A86-4999-BAE7-909C925FE922}.Release|x86.Build.0 = Release|Win32
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Debug|x64.ActiveCfg = Debug|x64
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Debug|x64.Build.0 = Debug|x64
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Debug|x86.ActiveCfg = Debug|Win32
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Debug|x86.Build.0 = Debug|Win32
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Release|x64.ActiveCfg = Release|x64
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Release|x64.Build.0 = Release|x64
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Release|x86.ActiveCfg = Release|Win32
-		{DFF7A15E-8184-4338-AE38-B0F3FF60C27C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DF37EAFE-B293-42C4-92A1-4BB1A5F8E76A}
+		SolutionGuid = {726B6863-0C25-44D9-ADC9-BEE3474FBC3C}
 	EndGlobalSection
 EndGlobal

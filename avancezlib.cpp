@@ -1,8 +1,5 @@
 #include "avancezlib.h"
 
-
-
-
 // Creates the main window. Returns true on success.
 bool AvancezLib::init(int width, int height)
 {
@@ -15,37 +12,38 @@ bool AvancezLib::init(int width, int height)
 	}
 
 	//Create window
-	window = SDL_CreateWindow("aVANCEZ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-	if (window == NULL)
+	m_window = SDL_CreateWindow("LUNAR LANDER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+	if (m_window == NULL)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		return false;
 	}
 	
 	//Create renderer for window
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == NULL)
+	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+	if (m_renderer == NULL)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
 	TTF_Init();
-	font = TTF_OpenFont("data/space_invaders.ttf", 12); //this opens a font style and sets a size
-	if (font == NULL)
+	m_font = TTF_OpenFont("data/space_invaders.ttf", 12); //this opens a font style and sets a size
+	if (m_font == NULL)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "font cannot be created! SDL_Error: %s\n", SDL_GetError());
 		return false;
 	}
 
 	// initialize the keys
-	key.fire = false;	key.left = false;	key.right = false;
+	m_key.fire = false;	m_key.left = false;	m_key.right = false;
 
 	//Initialize renderer color
-	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	//SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0x00);
 
 	//Clear screen
-	SDL_RenderClear(renderer);
+	SDL_RenderClear(m_renderer);
 
 	SDL_Log("System up and running...\n");
 	return true;
@@ -57,10 +55,10 @@ void AvancezLib::destroy()
 {
 	SDL_Log("Shutting down the system\n");
 
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(m_renderer);
+	SDL_DestroyWindow(m_window);
 
-	TTF_CloseFont(font);
+	TTF_CloseFont(m_font);
 
 	TTF_Quit();
 	SDL_Quit();
@@ -69,14 +67,13 @@ void AvancezLib::destroy()
 
 bool AvancezLib::update()
 {
-	bool go_on = true;
 	SDL_Event event;
 
 
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT)
-			go_on = false;
+			return false;
 
 		if (event.type == SDL_KEYDOWN)
 		{
@@ -84,16 +81,15 @@ bool AvancezLib::update()
 			{
 			case SDLK_ESCAPE:
 			case SDLK_q:
-				go_on = false;
-				break;
+				return false;
 			case SDLK_SPACE:
-				key.fire = true;
+				m_key.fire = true;
 				break;
 			case SDLK_LEFT:
-				key.left = true;
+				m_key.left = true;
 				break;
 			case SDLK_RIGHT:
-				key.right = true;
+				m_key.right = true;
 				break;
 			}
 		}
@@ -103,13 +99,13 @@ bool AvancezLib::update()
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_SPACE:
-				key.fire = false;
+				m_key.fire = false;
 				break;
 			case SDLK_LEFT:
-				key.left = false;
+				m_key.left = false;
 				break;
 			case SDLK_RIGHT:
-				key.right = false;
+				m_key.right = false;
 				break;
 			}
 		}
@@ -117,12 +113,12 @@ bool AvancezLib::update()
 	}
 
 	//Update screen
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(m_renderer);
 
 	//Clear screen
-	SDL_RenderClear(renderer);
+	SDL_RenderClear(m_renderer);
 
-	return go_on;
+	return true;
 }
 
 
@@ -136,7 +132,7 @@ Sprite * AvancezLib::createSprite(const char * path)
 	}
 
 	//Create texture from surface pixels
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surf);
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(m_renderer, surf);
 	if (texture == NULL)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to create texture from %s! SDL Error: %s\n", path, SDL_GetError());
@@ -146,25 +142,27 @@ Sprite * AvancezLib::createSprite(const char * path)
 	//Get rid of old loaded surface
 	SDL_FreeSurface(surf);
 
-	Sprite * sprite = new Sprite(renderer, texture);
+	Sprite * sprite = new Sprite(m_renderer, texture);
 
 	return sprite;
 }
 
 void AvancezLib::drawText(int x, int y, const char * msg)
 {
-	SDL_Color black = { 0, 0, 0 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+	//SDL_Color black = { 0, 0, 0 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
-	SDL_Surface* surf = TTF_RenderText_Solid(font, msg, black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Color text_color = { 255, 255, 255 };
 
-	SDL_Texture* msg_texture = SDL_CreateTextureFromSurface(renderer, surf); //now you can convert it into a texture
+	SDL_Surface* surf = TTF_RenderText_Solid(m_font, msg, text_color); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+
+	SDL_Texture* msg_texture = SDL_CreateTextureFromSurface(m_renderer, surf); //now you can convert it into a texture
 
 	int w = 0;
 	int h = 0;
 	SDL_QueryTexture(msg_texture, NULL, NULL, &w, &h);
 	SDL_Rect dst_rect = { x, y, w, h };
 
-	SDL_RenderCopy(renderer, msg_texture, NULL, &dst_rect);
+	SDL_RenderCopy(m_renderer, msg_texture, NULL, &dst_rect);
 
 	SDL_DestroyTexture(msg_texture);
 	SDL_FreeSurface(surf);
@@ -177,16 +175,16 @@ float AvancezLib::getElapsedTime()
 
 void AvancezLib::getKeyStatus(KeyStatus & keys)
 {
-	keys.fire = key.fire;
-	keys.left = key.left;
-	keys.right = key.right;
+	keys.fire = m_key.fire;
+	keys.left = m_key.left;
+	keys.right = m_key.right;
 }
 
 
 Sprite::Sprite(SDL_Renderer * renderer, SDL_Texture * texture)
 {
-	this->renderer = renderer;
-	this->texture = texture;
+	m_renderer = renderer;
+	m_texture = texture;
 }
 
 
@@ -197,7 +195,7 @@ void Sprite::draw(int x, int y, float angle)
 	rect.x = x;
 	rect.y = y;
 
-	SDL_QueryTexture(texture, NULL, NULL, &(rect.w), &(rect.h));
+	SDL_QueryTexture(m_texture, NULL, NULL, &(rect.w), &(rect.h));
 	SDL_Point center;
 	center.x = (int)(rect.w / 2.f);
 	center.y = (int)(rect.h / 2.f);
@@ -205,8 +203,8 @@ void Sprite::draw(int x, int y, float angle)
 	//Render texture to screen
 //	SDL_RenderCopy(renderer, texture, NULL, &rect);
 
-	SDL_RenderCopyEx(renderer,
-		texture,
+	SDL_RenderCopyEx(m_renderer,
+		m_texture,
 		NULL,
 		&rect,
 		angle,
@@ -217,6 +215,6 @@ void Sprite::draw(int x, int y, float angle)
 
 void Sprite::destroy()
 {
-	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(m_texture);
 }
 

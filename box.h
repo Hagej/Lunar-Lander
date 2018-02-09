@@ -1,4 +1,3 @@
-
 class BoxPhysicsComponent : public Component
 {
 	b2World* world;
@@ -40,12 +39,12 @@ public:
 		float32 angle = body->GetAngle();
 
 		// update the state of the game object here
-		go->horizontalPosition = position.x - size_x;
-		go->verticalPosition = WINDOW_HEIGHT - (position.y + size_y);
-		go->angle = angle * (-180 / 3.14f);
+		m_go->m_horizontalPosition = position.x - size_x;
+		m_go->m_verticalPosition = WINDOW_HEIGHT - (position.y + size_y);
+		m_go->m_angle = angle * (-180 / 3.14f);
 		
 		if (position.y < 0) {
-			go->enabled = false;
+			m_go->m_enabled = false;
 		}
 
 	}

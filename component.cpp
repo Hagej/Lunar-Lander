@@ -4,9 +4,9 @@
 
 void Component::Create(AvancezLib * system, GameObject * go, std::set<GameObject*>* game_objects)
 {
-	this->go = go;
-	this->system = system;
-	this->game_objects = game_objects;
+	m_go = go;
+	m_system = system;
+	m_game_objects = game_objects;
 }
 
 void RenderComponent::Create(AvancezLib * system, GameObject * go, std::set<GameObject*>* game_objects, const char * sprite_name)
@@ -18,11 +18,11 @@ void RenderComponent::Create(AvancezLib * system, GameObject * go, std::set<Game
 
 void RenderComponent::Update(float dt)
 {
-	if (!go->enabled)
+	if (!m_go->m_enabled)
 		return;
 
 	if (sprite)
-		sprite->draw(int(go->horizontalPosition), int(go->verticalPosition), go->angle);
+		sprite->draw(int(m_go->m_horizontalPosition), int(m_go->m_verticalPosition), m_go->m_angle);
 }
 
 void RenderComponent::Destroy()
@@ -42,17 +42,16 @@ void CollideComponent::Create(AvancezLib* system, GameObject * go, std::set<Game
 
 void CollideComponent::Update(float dt)
 {
-	for (auto i = 0; i < coll_objects->pool.size(); i++)
+	for (auto go0 : coll_objects->m_pool)
 	{
-		GameObject * go0 = coll_objects->pool[i];
-		if (go0->enabled)
+		if (go0->m_enabled)
 		{
-			if ((go0->horizontalPosition > go->horizontalPosition - 10) &&
-				(go0->horizontalPosition < go->horizontalPosition + 10) &&
-				(go0->verticalPosition   > go->verticalPosition - 10) &&
-				(go0->verticalPosition   < go->verticalPosition + 10))
+			if ((go0->m_horizontalPosition > m_go->m_horizontalPosition - 10) &&
+				(go0->m_horizontalPosition < m_go->m_horizontalPosition + 10) &&
+				(go0->m_verticalPosition   > m_go->m_verticalPosition - 10) &&
+				(go0->m_verticalPosition   < m_go->m_verticalPosition + 10))
 			{
-				go->Receive(HIT);
+				m_go->Receive(HIT);
 				go0->Receive(HIT);
 			}
 		}

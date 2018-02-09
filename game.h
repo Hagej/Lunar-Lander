@@ -5,12 +5,7 @@ class Game : public GameObject
 	std::set<GameObject*> game_objects;	// http://www.cplusplus.com/reference/set/set/
 
 	AvancezLib* system;
-
 	b2World * world;
-
-
-	Box * static_box;
-	Box * dynamic_box;
 
 	bool game_over;
 
@@ -28,36 +23,6 @@ public:
 		b2Vec2 gravity(0.0f, -0.25f);
 		world = new b2World(gravity);
 
-		// initialize static box here
-		static_box = new Box();
-
-		RenderComponent * static_render = new RenderComponent();
-		static_render->Create(system, static_box, &game_objects, "data/box.bmp");
-
-		BoxPhysicsComponent * static_component = new BoxPhysicsComponent();
-		static_component->Create(system, world, static_box, &game_objects, b2_staticBody, 130, 192, 64, 64);
-		
-		static_box->Create();
-		static_box->AddComponent(static_render);
-		static_box->AddComponent(static_component);
-		static_box->AddReceiver(this);
-		game_objects.insert(static_box);
-
-		// initialize dynamic box here
-		dynamic_box = new Box();
-
-		RenderComponent * dynamic_render = new RenderComponent();
-		dynamic_render->Create(system, dynamic_box, &game_objects, "data/small_box.bmp");
-
-		BoxPhysicsComponent * dynamic_component = new BoxPhysicsComponent;
-		dynamic_component->Create(system, world, dynamic_box, &game_objects, b2_dynamicBody, 170, 400, 32, 32);
-
-		dynamic_box->Create();
-		dynamic_box->AddComponent(dynamic_render);
-		dynamic_box->AddComponent(dynamic_component);
-		dynamic_box->AddReceiver(this);
-		game_objects.insert(dynamic_box);
-
 		score = 0;
 	}
 
@@ -66,7 +31,7 @@ public:
 		for (auto go = game_objects.begin(); go != game_objects.end(); go++)
 			(*go)->Init();
 
-		enabled = true;
+		m_enabled = true;
 		game_over = false;
 	}
 

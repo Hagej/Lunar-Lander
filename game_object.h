@@ -8,14 +8,14 @@ class Component;
 class GameObject
 {
 protected:
-	std::vector<GameObject*> receivers;
-	std::vector<Component*> components;
+	std::vector<GameObject*> m_receivers;
+	std::vector<Component*> m_components;
 
 public:
-	double horizontalPosition;
-	double verticalPosition;
-	float angle; // angle of rotation in degrees
-	bool enabled;
+	double m_horizontalPosition;
+	double m_verticalPosition;
+	float m_angle; // angle of rotation in degrees
+	bool m_enabled;
 
 	virtual ~GameObject();
 
