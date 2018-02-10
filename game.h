@@ -28,8 +28,8 @@ public:
 
 	virtual void Init()
 	{
-		for (auto go = game_objects.begin(); go != game_objects.end(); go++)
-			(*go)->Init();
+		for (auto go : game_objects)
+			go->Init();
 
 		m_enabled = true;
 		game_over = false;
@@ -44,8 +44,8 @@ public:
 
 		world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-		for (auto go = game_objects.begin(); go != game_objects.end(); go++)
-			(*go)->Update(dt);
+		for (auto go : game_objects)
+			go->Update(dt);
 	}
 
 	virtual void Draw()
@@ -82,11 +82,9 @@ public:
 	{
 		SDL_Log("Game::Destroy");
 
-		for (auto go = game_objects.begin(); go != game_objects.end(); go++)
-			(*go)->Destroy();
+		for (auto go : game_objects)
+			go->Destroy();
 
-		delete static_box;
-		delete dynamic_box;
 		delete world;
 	}
 };
