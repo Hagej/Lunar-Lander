@@ -9,7 +9,6 @@
 #include "game_object.h"
 
 #include "lander.h"
-#include "box.h"
 #include "game.h"
 
 using namespace std;

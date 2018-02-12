@@ -22,6 +22,7 @@
     <ClCompile Include="avancezlib.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="game_object.cpp" />
+    <ClCompile Include="lander.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +32,7 @@
     <ClInclude Include="defines.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_object.h" />
+    <ClInclude Include="lander.h" />
     <ClInclude Include="object_pool.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
