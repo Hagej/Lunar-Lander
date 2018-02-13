@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "defines.h"
 
 template <class T>
 class ObjectPool
@@ -28,14 +29,18 @@ public:
 
 	void Deallocate()
 	{
+#if LOG
 		SDL_Log("ObjectPool::Deallocating ");
+#endif
 		for (auto it : m_pool)
 			delete it;
 	}
 
 	~ObjectPool()
 	{
+#if LOG
 		SDL_Log("ObjectPool::~ObjectPool");
+#endif
 		Deallocate();
 	}
 

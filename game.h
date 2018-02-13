@@ -6,6 +6,9 @@ class Game : public GameObject
 
 	AvancezLib* system;
 	b2World * world;
+	b2Body * landerBody;
+
+	GameObject* lander;
 
 	bool game_over;
 
@@ -23,6 +26,10 @@ public:
 		b2Vec2 gravity(0.0f, -0.25f);
 		world = new b2World(gravity);
 
+		initLander();	// initializes the lander game object and body
+
+
+
 		score = 0;
 	}
 
@@ -39,8 +46,6 @@ public:
 	{
 		if (IsGameOver())
 			dt = 0.f;
-
-		// update the physics module here
 
 		world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -67,13 +72,12 @@ public:
 			game_over = true;
 	}
 
-
 	bool IsGameOver()
 	{
 		return game_over;
 	}
 
-	unsigned int Score()
+	unsigned int getScore()
 	{
 		return score;
 	}
@@ -86,5 +90,37 @@ public:
 			go->Destroy();
 
 		delete world;
+	}
+
+private:
+
+	void initLander() {
+
+		LanderPhysicsComponent physics;
+		physics.Create(system, lander, &game_objects, landerBody);
+		
+		lander->Create();
+		lander->AddComponent(&physics);
+		lander->AddReceiver(this);
+		lander->m_horizontalPosition = LANDER_START_X;
+		lander->m_verticalPosition = LANDER_START_Y;
+		game_objects.insert(lander);
+
+		b2BodyDef bodyDef;
+		bodyDef.position.Set(LANDER_START_X, LANDER_START_Y);
+		bodyDef.type = b2_dynamicBody;	
+
+		landerBody = world->CreateBody(&bodyDef);
+
+		b2PolygonShape shape;
+		shape.SetAsBox(LANDER_WIDTH / 2.0f, LANDER_HEIGHT / 2.0f);
+
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+		fixture.density = LANDER_DENSITY;
+		fixture.friction = LANDER_FRICTION;
+
+		landerBody->CreateFixture(&fixture);
+
 	}
 };
