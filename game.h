@@ -28,6 +28,25 @@ public:
 		b2Vec2 gravity(0.0f, -0.25f);
 		world = new b2World(gravity);
 
+		b2BodyDef groundDef;
+		groundDef.position.Set(0.0f, 32.0f);
+		groundDef.type = b2_staticBody;
+		
+
+		b2Body* ground;
+		ground = world->CreateBody(&groundDef);
+		
+		b2PolygonShape groundShape;
+		groundShape.SetAsBox(200.0f, 10.0f);
+
+		b2FixtureDef groundFixture;
+		groundFixture.shape = &groundShape;
+		groundFixture.friction = 1.0f;
+
+		ground->CreateFixture(&groundFixture);
+
+
+
 		initLander();	// initializes the lander game object and body
 
 
@@ -129,14 +148,14 @@ private:
 		collision->Create(system, lander, &game_objects, &ground_objects); */
 		
 		// TODO: Add .bmp of lander
-		/* RenderComponent* render = new RenderComponent();
-		render->Create(system, lander, &game_objects, ""); */
+		RenderComponent* render = new RenderComponent();
+		render->Create(system, lander, &game_objects, "data/PH-lander.bmp");
 
 		lander->Create();
 		lander->AddComponent(physics);
 		lander->AddComponent(behaviour);
 		//lander->AddComponent(collision);
-		//lander->AddComponent(render);
+		lander->AddComponent(render);
 		lander->AddReceiver(this);
 		lander->m_horizontalPosition = LANDER_START_X;
 		lander->m_verticalPosition = LANDER_START_Y;
