@@ -1,3 +1,4 @@
+#include "avancezlib.h"
 #include "lander.h"
 
 
@@ -25,7 +26,9 @@ void LanderBehaviourComponent::Create(AvancezLib* system, GameObject* go, std::s
 
 void LanderBehaviourComponent::Update(float dt) {
 
-	if (m_system->getKeyStatus(Keys.fire) {
+	AvancezLib::KeyStatus keys;
+	m_system->getKeyStatus(keys);
+	if (keys.fire) {
 		float32 angle = m_body->GetAngle();
 		float32 x = cos(angle);
 		float32 y = sin(angle);
@@ -33,6 +36,12 @@ void LanderBehaviourComponent::Update(float dt) {
 		b2Vec2 force = b2Vec2(x * LANDER_THRUST, y * LANDER_THRUST);
 
 		m_body->ApplyForceToCenter(force, true);
+	}
+	if (keys.left && !keys.right) {
+		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() - LANDER_ROTATION_SPEED);
+	}
+	if (keys.right && !keys.left) {
+		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() + LANDER_ROTATION_SPEED);
 	}
 	
 	

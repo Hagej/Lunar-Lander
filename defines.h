@@ -22,4 +22,5 @@
 #define LANDER_WIDTH 2.0f
 #define LANDER_DENSITY 1.0f
 #define LANDER_FRICTION 0.3f
+#define LANDER_ROTATION_SPEED 1.0f
 
