@@ -3,6 +3,7 @@
 #include "Box2D\Box2D.h"
 #include "component.h"
 #include "game_object.h"
+#include "defines.h"
 
 class Lander : public GameObject {
 
@@ -24,8 +25,11 @@ public:
 
 class LanderBehaviourComponent : public Component {
 
+	b2Body* m_body;
+
 public:
 
-	virtual void Create(AvancezLib * system, GameObject* go, std::set<GameObject*>* gameObjects, b2Body body);
+	virtual void Create(AvancezLib * system, GameObject* go, std::set<GameObject*>* gameObjects, b2Body* body);
+	virtual void Update(float dt);
 
 };

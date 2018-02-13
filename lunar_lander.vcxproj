@@ -24,6 +24,7 @@
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="lander.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
