@@ -8,7 +8,7 @@ class Game : public GameObject
 	b2World * world;
 	b2Body * landerBody;
 
-	GameObject* lander;
+	Lander* lander;
 
 	bool game_over;
 
@@ -18,7 +18,9 @@ public:
 
 	virtual void Create(AvancezLib* system)
 	{
+#if LOG
 		SDL_Log("Game::Create");
+#endif
 
 		this->system = system;
 
@@ -96,19 +98,12 @@ private:
 
 	void initLander() {
 
-		LanderPhysicsComponent physics;
-		physics.Create(system, lander, &game_objects, landerBody);
-		
-		lander->Create();
-		lander->AddComponent(&physics);
-		lander->AddReceiver(this);
-		lander->m_horizontalPosition = LANDER_START_X;
-		lander->m_verticalPosition = LANDER_START_Y;
-		game_objects.insert(lander);
+		lander = new Lander();	// Construct lander game object
 
+		/* Construct lander bodydef, shape, fixture and body */
 		b2BodyDef bodyDef;
 		bodyDef.position.Set(LANDER_START_X, LANDER_START_Y);
-		bodyDef.type = b2_dynamicBody;	
+		bodyDef.type = b2_dynamicBody;
 
 		landerBody = world->CreateBody(&bodyDef);
 
@@ -121,6 +116,32 @@ private:
 		fixture.friction = LANDER_FRICTION;
 
 		landerBody->CreateFixture(&fixture);
+
+		/* Create lander components */
+		LanderPhysicsComponent* physics = new LanderPhysicsComponent(); 
+		physics->Create(system, lander, &game_objects, landerBody);
+
+		LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
+		behaviour->Create(system, lander, &game_objects, landerBody);
+		
+		// TODO: Create ground objects
+		/* CollideComponent* collision = new CollideComponent();
+		collision->Create(system, lander, &game_objects, &ground_objects); */
+		
+		// TODO: Add .bmp of lander
+		/* RenderComponent* render = new RenderComponent();
+		render->Create(system, lander, &game_objects, ""); */
+
+		lander->Create();
+		lander->AddComponent(physics);
+		lander->AddComponent(behaviour);
+		//lander->AddComponent(collision);
+		//lander->AddComponent(render);
+		lander->AddReceiver(this);
+		lander->m_horizontalPosition = LANDER_START_X;
+		lander->m_verticalPosition = LANDER_START_Y;
+		game_objects.insert(lander);
+
 
 	}
 };

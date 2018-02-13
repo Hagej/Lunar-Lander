@@ -1,4 +1,5 @@
 // GameObject represents objects which moves are drawn
+#pragma once
 #include <vector>
 
 enum Message { HIT, ALIEN_HIT, GAME_OVER, LEVEL_WIN, NO_MSG };
