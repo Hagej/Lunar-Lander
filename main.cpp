@@ -18,8 +18,9 @@ float game_speed = 1.f;
 int main(int argc, char** argv)
 {
 	AvancezLib system;
-
 	system.init(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	
 
 	Game game;
 	game.Create(&system);

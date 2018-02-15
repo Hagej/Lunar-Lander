@@ -29,7 +29,7 @@ void LanderBehaviourComponent::Update(float dt) {
 	AvancezLib::KeyStatus keys;
 	m_system->getKeyStatus(keys);
 	if (keys.fire) {
-		float32 angle = m_body->GetAngle();
+		float32 angle = m_body->GetAngle() - 45;
 		float32 x = cos(angle);
 		float32 y = sin(angle);
 
@@ -38,10 +38,10 @@ void LanderBehaviourComponent::Update(float dt) {
 		m_body->ApplyForceToCenter(force, true);
 	}
 	if (keys.left && !keys.right) {
-		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() - LANDER_ROTATION_SPEED);
+		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() + (LANDER_ROTATION_SPEED * dt));
 	}
 	if (keys.right && !keys.left) {
-		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() + LANDER_ROTATION_SPEED);
+		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() - (LANDER_ROTATION_SPEED * dt));
 	}
 	
 	

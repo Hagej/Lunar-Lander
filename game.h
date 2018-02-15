@@ -70,15 +70,31 @@ public:
 
 		world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
+		//TODO: Add sound system update here
+
 		for (auto go : game_objects)
 			go->Update(dt);
 	}
 
 	virtual void Draw()
 	{
+		float angle = landerBody->GetAngle();
+		float x = cos(angle);
+		float y = sin(angle);
+		b2Vec2 vel = landerBody->GetLinearVelocity(); 
 		char msg[1024];
-		sprintf(msg, "physics demo");
+		sprintf(msg, "Angle: %d", (int)(angle * 180.0f/3.14f));
 		system->drawText(300, 32, msg);
+		sprintf(msg, "Horizontal speed: %d", (int)vel.x);
+		system->drawText(400, 32, msg);
+		sprintf(msg, "Vertical speed: %d", (int)vel.y);
+		system->drawText(400, 64, msg);
+
+		sprintf(msg, "Direction X: %d", (int)x);
+		system->drawText(200, 32, msg);
+		sprintf(msg, "Direction Y: %d", (int)y);
+		system->drawText(200, 64, msg);
+
 
 		if (IsGameOver())
 		{
@@ -143,18 +159,12 @@ private:
 		LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
 		behaviour->Create(system, lander, &game_objects, landerBody);
 		
-		// TODO: Create ground objects
-		/* CollideComponent* collision = new CollideComponent();
-		collision->Create(system, lander, &game_objects, &ground_objects); */
-		
-		// TODO: Add .bmp of lander
 		RenderComponent* render = new RenderComponent();
 		render->Create(system, lander, &game_objects, "data/PH-lander.bmp");
 
 		lander->Create();
 		lander->AddComponent(physics);
 		lander->AddComponent(behaviour);
-		//lander->AddComponent(collision);
 		lander->AddComponent(render);
 		lander->AddReceiver(this);
 		lander->m_horizontalPosition = LANDER_START_X;
