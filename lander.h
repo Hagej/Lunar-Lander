@@ -3,7 +3,6 @@
 #include "Box2D\Box2D.h"
 #include "component.h"
 #include "game_object.h"
-#include "defines.h"
 
 class Lander : public GameObject {
 

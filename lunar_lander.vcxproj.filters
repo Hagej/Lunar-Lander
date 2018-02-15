@@ -30,6 +30,9 @@
     <ClCompile Include="lander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lunarlander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_object.h">
@@ -50,10 +53,16 @@
     <ClInclude Include="object_pool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="defines.h">
+    <ClInclude Include="lander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lander.h">
+    <ClInclude Include="system_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lunarlander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

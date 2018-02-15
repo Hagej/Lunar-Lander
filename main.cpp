@@ -1,19 +1,13 @@
 #include <iostream>
-#include "defines.h"	// Contains all constants used
+#include "system_defs.h"	// Contains all constants used
 
 #include "fmod.hpp"			// Low level library for Fmod
 #include "fmod_studio.hpp"	// Fmod studio which manages sound banks
 #include "fmod_errors.h"	// Error logging for Fmod
 
-#include "Box2D/Box2D.h"
 #include "avancezlib.h"
 
-#include "object_pool.h"
-#include "component.h"
-#include "game_object.h"
-
-#include "lander.h"
-#include "game.h"
+#include "lunarlander.h"
 
 using namespace std;
 
@@ -40,8 +34,9 @@ int main(int argc, char** argv)
 
 	fmodErrCheck( fmod_studio->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0) );
 
-	Game game;
-	game.Create(&system, &fmod_studio);
+	// Init the game object. Set type to the game that is being played
+	LunarLander game;
+	game.Create(&system, fmod_studio);
 	game.Init();
 
 	float lastTime = system.getElapsedTime();
@@ -53,8 +48,9 @@ int main(int argc, char** argv)
 		lastTime = newTime;
 
 		game.Update(dt);
-
 		game.Draw();
+
+		fmod_studio->update();
 	}
 
 	// clean up

@@ -1,5 +1,7 @@
 #include "avancezlib.h"
 #include "lander.h"
+#include "system_defs.h"
+#include "game_defs.h"
 
 
 void LanderPhysicsComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2Body* body) {
@@ -32,8 +34,11 @@ void LanderBehaviourComponent::Update(float dt) {
 		float32 angle = m_body->GetAngle() + M_PI/2;
 		float32 x = cos(angle);
 		float32 y = sin(angle);
+		float32 len = sqrtf(powf(x, 2) + powf(y, 2));
+		x /= len;
+		y /= len;
 
-		b2Vec2 force = b2Vec2(x * LANDER_THRUST, y * LANDER_THRUST);
+		b2Vec2 force = b2Vec2(x * LANDER_THRUST * dt, y * LANDER_THRUST * dt);
 
 		m_body->ApplyForceToCenter(force, true);
 	}
@@ -43,6 +48,6 @@ void LanderBehaviourComponent::Update(float dt) {
 	if (keys.right && !keys.left) {
 		m_body->SetTransform(m_body->GetPosition(), m_body->GetAngle() - (LANDER_ROTATION_SPEED * dt));
 	}
-	
-	
+
+
 }

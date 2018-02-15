@@ -86,9 +86,11 @@ bool AvancezLib::update()
 				m_key.fire = true;
 				break;
 			case SDLK_LEFT:
+			case SDLK_a:
 				m_key.left = true;
 				break;
 			case SDLK_RIGHT:
+			case SDLK_d:
 				m_key.right = true;
 				break;
 			}
@@ -102,9 +104,11 @@ bool AvancezLib::update()
 				m_key.fire = false;
 				break;
 			case SDLK_LEFT:
+			case SDLK_a:
 				m_key.left = false;
 				break;
 			case SDLK_RIGHT:
+			case SDLK_d:
 				m_key.right = false;
 				break;
 			}
