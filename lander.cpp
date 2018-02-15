@@ -29,7 +29,7 @@ void LanderBehaviourComponent::Update(float dt) {
 	AvancezLib::KeyStatus keys;
 	m_system->getKeyStatus(keys);
 	if (keys.fire) {
-		float32 angle = m_body->GetAngle() - 45;
+		float32 angle = m_body->GetAngle() + M_PI/2;
 		float32 x = cos(angle);
 		float32 y = sin(angle);
 
