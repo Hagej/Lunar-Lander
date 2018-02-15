@@ -5,6 +5,9 @@ class Game : public GameObject
 	std::set<GameObject*> game_objects;	// http://www.cplusplus.com/reference/set/set/
 
 	AvancezLib* system;
+
+	FMOD::Studio::System* fmod_studio;
+
 	b2World * world;
 	b2Body * landerBody;
 
@@ -16,13 +19,14 @@ class Game : public GameObject
 
 public:
 
-	virtual void Create(AvancezLib* system)
+	virtual void Create(AvancezLib* system, FMOD::Studio::System* fmod_studio)
 	{
 #if LOG
 		SDL_Log("Game::Create");
 #endif
 
 		this->system = system;
+		this->fmod_studio = fmod_studio;
 
 		// initialize physics system
 		b2Vec2 gravity(0.0f, -0.25f);
@@ -70,7 +74,7 @@ public:
 
 		world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-		//TODO: Add sound system update here
+		fmod_studio->update();
 
 		for (auto go : game_objects)
 			go->Update(dt);
