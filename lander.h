@@ -6,11 +6,19 @@
 
 class Lander : public GameObject {
 
+	b2Body* m_body;
 	b2Vec2 m_size;
 
 public:
 
-	inline b2Vec2 getSize() { return m_size; }
+	void Create(b2Body* body);
+	~Lander();
+
+	inline b2Vec2 GetSize() { return m_size; }
+	inline b2Body* GetBody() { return m_body; }
+	int Land();
+	int Crash();
+
 };
 
 class LanderPhysicsComponent : public Component {
@@ -24,11 +32,9 @@ public:
 
 class LanderBehaviourComponent : public Component {
 
-	b2Body* m_body;
-
 public:
 
-	virtual void Create(AvancezLib * system, GameObject* go, std::set<GameObject*>* gameObjects, b2Body* body);
+	virtual void Create(AvancezLib * system, Lander* go, std::set<GameObject*>* gameObjects);
 	virtual void Update(float dt);
 
 };

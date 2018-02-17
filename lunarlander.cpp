@@ -1,14 +1,12 @@
 #include "lunarlander.h"
 
-
-
 void LunarLander::Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) {
 
 	Game::Create(system, fmod_studio);
 
 	InitWorld();
-
 	InitLander();	
+	
 
 }
 
@@ -56,6 +54,10 @@ void LunarLander::InitWorld() {
 	b2Vec2 gravity(0.0f, -0.25f);
 	world = new b2World(gravity);
 
+	collision = CollisionCallback();
+
+	world->SetContactListener(&collision);
+
 	b2BodyDef groundDef;
 	groundDef.position.Set(0.0f, 32.0f);
 	groundDef.type = b2_staticBody;
@@ -85,6 +87,8 @@ void LunarLander::InitLander() {
 
 	landerBody = world->CreateBody(&bodyDef);
 
+	landerBody->SetUserData(lander);
+
 	b2PolygonShape shape;
 	shape.SetAsBox(LANDER_WIDTH / 2.0f, LANDER_HEIGHT / 2.0f);
 
@@ -100,18 +104,18 @@ void LunarLander::InitLander() {
 	physics->Create(system, lander, &game_objects, landerBody);
 
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
-	behaviour->Create(system, lander, &game_objects, landerBody);
+	behaviour->Create(system, lander, &game_objects);
 
 	RenderComponent* render = new RenderComponent();
 	render->Create(system, lander, &game_objects, "data/PH-lander.bmp");
 
-	lander->Create();
+	lander->Create(landerBody);
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);
 	lander->AddReceiver(this);
-	lander->m_horizontalPosition = LANDER_START_X;
-	lander->m_verticalPosition = LANDER_START_Y;
+	//lander->m_horizontalPosition = LANDER_START_X;
+	//lander->m_verticalPosition = LANDER_START_Y;
 	game_objects.insert(lander);
 
 
