@@ -11,6 +11,7 @@ void Lander::Create(b2Body* body) {
 }
 
 int Lander::Crash() {
+	is_crashing = true;
 	this->m_enabled = false;
 	return 0;
 }
@@ -19,16 +20,17 @@ int Lander::Land() {
 	return 1;
 }
 
-Lander::~Lander() {
-	m_body->GetWorld()->DestroyBody(m_body);
-}
-
 void LanderPhysicsComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2Body* body) {
 	Component::Create(system, go, game_objects);
 	m_body = body;
 }
 
 void LanderPhysicsComponent::Update(float dt) {
+
+	if (((Lander *)m_go)->IsCrashing()) {
+		m_body->GetWorld()->DestroyBody(m_body);
+		return;
+	}
 
 	b2Vec2 size = ((Lander *)m_go)->GetSize();
 	b2Vec2 position = m_body->GetPosition();
