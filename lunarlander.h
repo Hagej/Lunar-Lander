@@ -4,16 +4,21 @@
 #include "Box2D/Box2D.h"
 #include "collision_callback.h"
 
+#include "PhysicsComponent.h"
+
 #include "lander.h"
+#include "ground.h"
 
 class LunarLander : public Game {
 
 	b2World * world;
 	CollisionCallback collision;
 
-	b2Body * landerBody;
+	b2Body* landerBody;
+	b2Body* groundBody;
 
 	Lander* lander;
+	Ground* ground;
 
 public:
 

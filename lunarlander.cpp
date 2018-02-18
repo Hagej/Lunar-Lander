@@ -59,20 +59,35 @@ void LunarLander::InitWorld() {
 	world->SetContactListener(&collision);
 
 	b2BodyDef groundDef;
-	groundDef.position.Set(0.0f, 32.0f);
+	groundDef.position.Set(320.0f, 16.0f);
 	groundDef.type = b2_staticBody;
 
-	b2Body* ground;
-	ground = world->CreateBody(&groundDef);
+	groundBody = world->CreateBody(&groundDef);
 
 	b2PolygonShape groundShape;
-	groundShape.SetAsBox(200.0f, 10.0f);
+	groundShape.SetAsBox(320.0f, 16.0f);
 
 	b2FixtureDef groundFixture;
 	groundFixture.shape = &groundShape;
 	groundFixture.friction = 1.0f;
 
-	ground->CreateFixture(&groundFixture);
+	groundBody->CreateFixture(&groundFixture);
+
+	ground = new Ground();
+
+	RenderComponent* render = new RenderComponent();
+	render->Create(system, ground, &game_objects, "data/ground_box.bmp");
+
+	PhysicsComponent* physics = new PhysicsComponent();
+	physics->Create(system, ground, &game_objects, groundBody);
+
+	b2Vec2 groundSize = b2Vec2(640.0f, 32.0f);
+
+	ground->Create(groundSize, groundBody);
+	ground->AddComponent(render);
+	ground->AddComponent(physics);
+	game_objects.insert(ground);
+	
 }
 
 // Initializes the Lander game object and b2Body
@@ -100,7 +115,7 @@ void LunarLander::InitLander() {
 	landerBody->CreateFixture(&fixture);
 
 	/* Create lander components */
-	LanderPhysicsComponent* physics = new LanderPhysicsComponent();
+	PhysicsComponent* physics = new PhysicsComponent();
 	physics->Create(system, lander, &game_objects, landerBody);
 
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
@@ -109,13 +124,13 @@ void LunarLander::InitLander() {
 	RenderComponent* render = new RenderComponent();
 	render->Create(system, lander, &game_objects, "data/PH-lander.bmp");
 
-	lander->Create(landerBody);
+	b2Vec2 size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
+
+	lander->Create(size, landerBody);
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);
 	lander->AddReceiver(this);
-	//lander->m_horizontalPosition = LANDER_START_X;
-	//lander->m_verticalPosition = LANDER_START_Y;
 	game_objects.insert(lander);
 
 

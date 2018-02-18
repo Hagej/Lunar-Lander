@@ -5,7 +5,10 @@
 
 
 
-void Lander::Create(b2Body* body) {
+void Lander::Create(b2Vec2 size, b2Body* body) {
+
+	GameObject::Create(size);
+
 	m_body = body;
 	m_size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
 }
@@ -20,26 +23,9 @@ int Lander::Land() {
 	return 1;
 }
 
-void LanderPhysicsComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2Body* body) {
-	Component::Create(system, go, game_objects);
-	m_body = body;
-}
-
-void LanderPhysicsComponent::Update(float dt) {
-
-	if (((Lander *)m_go)->IsCrashing()) {
-		m_body->GetWorld()->DestroyBody(m_body);
-		return;
-	}
-
-	b2Vec2 size = ((Lander *)m_go)->GetSize();
-	b2Vec2 position = m_body->GetPosition();
-	float32 angle = m_body->GetAngle();
-
-	// update the state of the game object here
-	m_go->m_horizontalPosition = position.x - size.x;
-	m_go->m_verticalPosition = WINDOW_HEIGHT - (position.y + size.y);
-	m_go->m_angle = angle * (-180 / 3.14f);
+void Lander::Destroy() {
+	GameObject::Destroy();
+	m_body->GetWorld()->DestroyBody(m_body);
 }
 
 void LanderBehaviourComponent::Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects) {
@@ -47,6 +33,11 @@ void LanderBehaviourComponent::Create(AvancezLib* system, Lander* go, std::set<G
 }
 
 void LanderBehaviourComponent::Update(float dt) {
+
+	if (((Lander *)m_go)->IsCrashing()) {
+		((Lander *)m_go)->Destroy();
+		return;
+	}
 
 	AvancezLib::KeyStatus keys;
 	m_system->getKeyStatus(keys);

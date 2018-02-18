@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="avancezlib.cpp" />
     <ClCompile Include="component.cpp" />
+    <ClCompile Include="ground.cpp" />
     <ClCompile Include="lunarlander.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="lander.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
@@ -34,9 +36,11 @@
     <ClInclude Include="game_defs.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_object.h" />
+    <ClInclude Include="ground.h" />
     <ClInclude Include="lander.h" />
     <ClInclude Include="lunarlander.h" />
     <ClInclude Include="object_pool.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="system_defs.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

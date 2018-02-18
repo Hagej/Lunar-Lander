@@ -7,29 +7,19 @@
 class Lander : public GameObject {
 
 	b2Body* m_body;
-	b2Vec2 m_size;
 
 	bool is_crashing = false;
 
 public:
 
-	void Create(b2Body* body);
+	void Create(b2Vec2 size, b2Body* body);
 
-	inline b2Vec2 GetSize() { return m_size; }
 	inline b2Body* GetBody() { return m_body; }
 	inline bool IsCrashing() { return is_crashing; }
 	int Land();
 	int Crash();
+	void Destroy();
 
-};
-
-class LanderPhysicsComponent : public Component {
-
-	b2Body* m_body;
-
-public:
-	virtual void Create(AvancezLib * system, GameObject *go, std::set<GameObject*>* gameObjects, b2Body *body);
-	virtual void Update(float dt);
 };
 
 class LanderBehaviourComponent : public Component {

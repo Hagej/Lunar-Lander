@@ -2,6 +2,8 @@
 #pragma once
 #include <vector>
 
+#include "Box2D\Box2D.h"
+
 enum Message { HIT, ALIEN_HIT, GAME_OVER, LEVEL_WIN, NO_MSG };
 
 class Component;
@@ -12,6 +14,8 @@ protected:
 	std::vector<GameObject*> m_receivers;
 	std::vector<Component*> m_components;
 
+	b2Vec2 m_size;
+
 public:
 	double m_horizontalPosition;
 	double m_verticalPosition;
@@ -20,7 +24,7 @@ public:
 
 	virtual ~GameObject();
 
-	virtual void Create();
+	virtual void Create(b2Vec2 size);
 	virtual void AddComponent(Component * component);
 
 	virtual void Init();
@@ -29,4 +33,6 @@ public:
 	virtual void AddReceiver(GameObject *go);
 	virtual void Receive(Message m) {}
 	void Send(Message m);
+
+	inline b2Vec2 GetSize() { return m_size; }
 };

@@ -2,10 +2,11 @@
 #include "component.h"
 #include "avancezlib.h"
 
-void GameObject::Create()
+void GameObject::Create(b2Vec2 size)
 {
 	SDL_Log("GameObject::Create");
 
+	m_size = size;
 	m_enabled = false;
 	m_angle = 0;
 }

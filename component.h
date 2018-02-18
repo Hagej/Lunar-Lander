@@ -3,6 +3,7 @@
 #include <set>
 #include "object_pool.h"
 
+
 class GameObject;
 class AvancezLib;
 class Sprite;
