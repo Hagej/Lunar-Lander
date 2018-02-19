@@ -27,6 +27,8 @@ public:
 	void Draw();
 	void Destroy();
 
+	virtual void Receive(Message m);
+
 private:
 
 	void InitWorld();

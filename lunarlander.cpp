@@ -28,6 +28,8 @@ void LunarLander::Draw() {
 	float y = sin(angle);
 	b2Vec2 vel = landerBody->GetLinearVelocity();
 	char msg[1024];
+	sprintf(msg, "Score: %d", score);
+	system->drawText(100, 32, msg);
 	sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
 	system->drawText(300, 32, msg);
 	sprintf(msg, "Horizontal speed: %d", (int)vel.x);
@@ -46,6 +48,22 @@ void LunarLander::Draw() {
 void LunarLander::Destroy() {
 	Game::Destroy();
 	delete world;
+}
+
+void LunarLander::Receive(Message m) {
+	switch (m)
+	{
+	case CRASH:
+		score += 10;
+		//Restart();
+		break;
+	case LAND:
+		score += 100;
+		//Restart();
+		break;
+	default:
+		break;
+	}
 }
 
 // Initialize Box2D world
@@ -121,8 +139,12 @@ void LunarLander::InitLander() {
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
 	behaviour->Create(system, lander, &game_objects);
 
-	RenderComponent* render = new RenderComponent();
-	render->Create(system, lander, &game_objects, "data/PH-lander.bmp");
+	std::set<const char*>* sprites;
+	sprites = new std::set<const char*>();
+	sprites->insert("data/Lander_firing.bmp");
+
+	LanderRenderComponent* render = new LanderRenderComponent();
+	render->Create(system, lander, &game_objects, "data/PH-lander.bmp", sprites);
 
 	b2Vec2 size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
 

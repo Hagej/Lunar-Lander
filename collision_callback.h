@@ -18,16 +18,18 @@ class CollisionCallback : public b2ContactListener {
 		if (bodyUserData) {
 
 			Lander* lander = static_cast<Lander*>(bodyUserData);
-			float32 vel = lander->GetBody()->GetLinearVelocity().Length();
-			if (vel > LANDER_CRASH_THRESHOLD) {
-				SDL_Log("Lander crashed");
-				static_cast<Lander*>(bodyUserData)->Crash();
-				delete &body;
+			if (lander->m_enabled) {
+				float32 vel = lander->GetBody()->GetLinearVelocity().Length();
+				if (vel > LANDER_CRASH_THRESHOLD) {
+					SDL_Log("Lander crashed");
+					lander->Crash();
+				}
+				else {
+					SDL_Log("THE FALCON HAS LANDED!!!");
+					lander->Land();
+				}
 			}
-			else {
-				SDL_Log("THE FALCON HAVE LANDED!!!");
-				static_cast<Lander*>(bodyUserData)->Land();
-			}
+			
 		}
 
 		body = contact->GetFixtureB()->GetBody();
@@ -35,15 +37,16 @@ class CollisionCallback : public b2ContactListener {
 
 		if (bodyUserData) {
 			Lander* lander = static_cast<Lander*>(bodyUserData);
-			float32 vel = lander->GetBody()->GetLinearVelocity().Length();
-			SDL_Log("Lander is making contact. Velocity: %d", vel);
-			if (vel > LANDER_CRASH_THRESHOLD) {
-				SDL_Log("Lander crashed");
-				lander->Crash();
-			}
-			else {
-				SDL_Log("THE FALCON HAVE LANDED!!!");
-				lander->Land();
+			if (lander->m_enabled) {
+				float32 vel = lander->GetBody()->GetLinearVelocity().Length();
+				if (vel > LANDER_CRASH_THRESHOLD) {
+					SDL_Log("Lander crashed");
+					lander->Crash();
+				}
+				else {
+					SDL_Log("THE FALCON HAS LANDED!!!");
+					lander->Land();
+				}
 			}
 		}
 		
