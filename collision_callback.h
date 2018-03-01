@@ -25,7 +25,6 @@ class CollisionCallback : public b2ContactListener {
 					lander->Crash();
 				}
 				else {
-					SDL_Log("THE FALCON HAS LANDED!!!");
 					lander->Land();
 				}
 			}
@@ -44,18 +43,9 @@ class CollisionCallback : public b2ContactListener {
 					lander->Crash();
 				}
 				else {
-					SDL_Log("THE FALCON HAS LANDED!!!");
 					lander->Land();
 				}
 			}
 		}
-		
-
 	}
-
-	void PreSolve(b2Contact* contact, const b2Manifold* old_manifold) {
-
-
-	}
-
 };

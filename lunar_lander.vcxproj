@@ -115,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\libs\Fmod\inc;..\libs\Box2D;..\libs\SDL2-2.0.7\include;..\libs\SDL2_ttf-2.0.14\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>glew;glfw;imgui;..\libs\Fmod\inc;..\libs\Box2D;..\libs\SDL2-2.0.7\include;..\libs\SDL2_ttf-2.0.14\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\libs\SDL2-2.0.7\include;..\libs\SDL2_ttf-2.0.14\include;..\libs\Box2D;..\libs\Fmod\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>glew;glfw;imgui;..\libs\SDL2-2.0.7\include;..\libs\SDL2_ttf-2.0.14\include;..\libs\Box2D;..\libs\Fmod\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -7,7 +7,7 @@ void LunarLander::Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) 
 	InitWorld();
 	InitLander();	
 	
-
+	world->ClearForces();
 }
 
 void LunarLander::Update(float dt) {
@@ -15,7 +15,7 @@ void LunarLander::Update(float dt) {
 		dt = 0.f;
 
 	world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
+	world->DrawDebugData();
 	fmod_studio->update();
 
 	for (auto go : game_objects)
@@ -23,10 +23,10 @@ void LunarLander::Update(float dt) {
 }
 
 void LunarLander::Draw() {
-	float angle = landerBody->GetAngle();
+	float angle = lander_core->GetAngle();
 	float x = cos(angle);
 	float y = sin(angle);
-	b2Vec2 vel = landerBody->GetLinearVelocity();
+	b2Vec2 vel = lander_core->GetLinearVelocity();
 	char msg[1024];
 	sprintf(msg, "Score: %d", score);
 	system->drawText(100, 32, msg);
@@ -73,7 +73,6 @@ void LunarLander::InitWorld() {
 	world = new b2World(gravity);
 
 	collision = CollisionCallback();
-
 	world->SetContactListener(&collision);
 
 	b2BodyDef groundDef;
@@ -113,28 +112,120 @@ void LunarLander::InitLander() {
 
 	lander = new Lander();	// Construct lander game object
 
-	/* Construct lander bodydef, shape, fixture and body */
-	b2BodyDef bodyDef;
-	bodyDef.position.Set(LANDER_START_X, LANDER_START_Y);
-	bodyDef.type = b2_dynamicBody;
+	// Create lander body
+	{
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(LANDER_START_X, LANDER_START_Y);
+		lander_core = world->CreateBody(&bd);
 
-	landerBody = world->CreateBody(&bodyDef);
+		b2PolygonShape shape;
+		shape.SetAsBox(LANDER_HALF_WIDTH, LANDER_HALF_HEIGHT);
+		lander_core->CreateFixture(&shape, LANDER_DENSITY);
+	}
 
-	landerBody->SetUserData(lander);
+	std::set<b2Body*> lander_legs;
 
-	b2PolygonShape shape;
-	shape.SetAsBox(LANDER_WIDTH / 2.0f, LANDER_HEIGHT / 2.0f);
+	// Add left leg
+	{
+		b2PolygonShape shape;
+		shape.SetAsBox(4.0f, 1.0f);
 
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = LANDER_DENSITY;
-	fixture.friction = LANDER_FRICTION;
+		b2Body* left_leg = NULL;
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(LANDER_START_X-(LANDER_HALF_WIDTH + 4.0f), LANDER_START_Y-LANDER_HALF_HEIGHT);
+		left_leg = world->CreateBody(&bd);
+		left_leg->CreateFixture(&shape, LANDER_DENSITY);
 
-	landerBody->CreateFixture(&fixture);
+		lander_legs.insert(left_leg);
+
+		b2RevoluteJointDef rjd;
+		rjd.Initialize(lander_core, left_leg, b2Vec2(LANDER_START_X-LANDER_HALF_WIDTH, LANDER_START_Y-LANDER_HALF_HEIGHT));
+		rjd.referenceAngle = 30 * DEGTORAD;
+		rjd.enableLimit = true;
+		rjd.lowerAngle = -2 * DEGTORAD;
+		rjd.upperAngle = 2 * DEGTORAD;
+		world->CreateJoint(&rjd);
+
+		b2Body* left_leg_end = NULL;
+		b2BodyDef bd2;
+		bd2.type = b2_dynamicBody;
+		bd2.position.Set(LANDER_START_X -(LANDER_HALF_WIDTH + 4.0f * 3), LANDER_START_Y-LANDER_HALF_HEIGHT);
+		left_leg_end = world->CreateBody(&bd2);
+		left_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+
+		lander_legs.insert(left_leg_end);
+
+		b2RevoluteJointDef rjd2;
+		rjd2.Initialize(left_leg, left_leg_end, b2Vec2(LANDER_START_X -(LANDER_HALF_WIDTH + 4.0f * 2), LANDER_START_Y-LANDER_HALF_HEIGHT));
+		rjd2.referenceAngle = 30 * DEGTORAD;
+		rjd2.enableLimit = true;
+		rjd2.lowerAngle = -2 * DEGTORAD;
+		rjd2.upperAngle = 2 * DEGTORAD;
+		world->CreateJoint(&rjd2);
+
+	}
+
+
+	// Add right leg
+	{
+		b2PolygonShape shape;
+		shape.SetAsBox(4.0f, 1.0f);
+
+		b2Body* right_leg = NULL;
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f , LANDER_START_Y -LANDER_HALF_HEIGHT);
+		right_leg = world->CreateBody(&bd);
+		right_leg->CreateFixture(&shape, LANDER_DENSITY);
+
+		lander_legs.insert(right_leg);
+
+		b2RevoluteJointDef rjd;
+		rjd.Initialize(lander_core, right_leg, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH, LANDER_START_Y -LANDER_HALF_HEIGHT));
+		rjd.referenceAngle = -30 * DEGTORAD;
+		rjd.enableLimit = true;
+		rjd.lowerAngle = 2 * DEGTORAD;
+		rjd.upperAngle = -2 * DEGTORAD;
+		world->CreateJoint(&rjd);
+
+		b2Body* right_leg_end = NULL;
+		b2BodyDef bd2;
+		bd2.type = b2_dynamicBody;
+		bd2.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 3, LANDER_START_Y -LANDER_HALF_HEIGHT);
+		right_leg_end = world->CreateBody(&bd2);
+		right_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		lander_legs.insert(right_leg_end);
+
+		b2RevoluteJointDef rjd2;
+		rjd2.Initialize(right_leg, right_leg_end, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 2, LANDER_START_Y-LANDER_HALF_HEIGHT));
+		//rjd2.collideConnected = true;
+		rjd2.referenceAngle = -30 * DEGTORAD;
+		rjd2.enableLimit = true;
+		rjd2.lowerAngle = 2 * DEGTORAD;
+		rjd2.upperAngle = -2 * DEGTORAD;
+		world->CreateJoint(&rjd2);
+	}
+
+	for (b2Body* b : lander_legs) {
+		GameObject* go = new GameObject();
+
+		PhysicsComponent* physics = new PhysicsComponent();
+		physics->Create(system, go, &game_objects, b);
+
+		RenderComponent* render = new RenderComponent();
+		render->Create(system, go, &game_objects, "data/leg_ph.bmp");
+
+		go->Create(b2Vec2(8.0f, 2.0f));
+		go->AddComponent(physics);
+		go->AddComponent(render);
+		game_objects.insert(go);
+	}
 
 	/* Create lander components */
 	PhysicsComponent* physics = new PhysicsComponent();
-	physics->Create(system, lander, &game_objects, landerBody);
+	physics->Create(system, lander, &game_objects, lander_core);
 
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
 	behaviour->Create(system, lander, &game_objects);
@@ -146,9 +237,9 @@ void LunarLander::InitLander() {
 	LanderRenderComponent* render = new LanderRenderComponent();
 	render->Create(system, lander, &game_objects, "data/PH-lander.bmp", sprites);
 
-	b2Vec2 size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
+	b2Vec2 size = b2Vec2(LANDER_HALF_WIDTH * 2, LANDER_HALF_HEIGHT * 2);
 
-	lander->Create(size, landerBody);
+	lander->Create(size, lander_core);
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);

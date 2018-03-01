@@ -10,7 +10,7 @@ void Lander::Create(b2Vec2 size, b2Body* body) {
 	GameObject::Create(size);
 
 	m_body = body;
-	m_size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
+	m_size = b2Vec2(LANDER_HALF_WIDTH * 2, LANDER_HALF_HEIGHT * 2);
 }
 
 int Lander::Crash() {
@@ -24,9 +24,9 @@ int Lander::Land() {
 
 void Lander::Destroy() {
 	Send(CRASH);
-	/*m_body->GetWorld()->DestroyBody(m_body);
+	m_body->GetWorld()->DestroyBody(m_body);
 	m_body->SetUserData(NULL);
-	m_body = nullptr;*/
+	m_body = NULL;
 	this->m_enabled = false;
 	GameObject::Destroy();
 
@@ -56,7 +56,7 @@ void LanderBehaviourComponent::Update(float dt) {
 		lander->SetFiring(true);
 
 		b2Body* body = lander->GetBody();
-		float32 angle = body->GetAngle() + M_PI / 2;
+		float32 angle = body->GetAngle() + M_PI/2;
 		b2Vec2 vec = b2Vec2(cos(angle), sin(angle));
 		vec.Normalize();
 
