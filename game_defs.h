@@ -7,7 +7,7 @@
 
 
 /* Lander definitions */
-#define LANDER_THRUST 100000.0f
+#define LANDER_THRUST 300000.0f
 #define LANDER_START_X 300
 #define LANDER_START_Y 400
 #define LANDER_START_ANGLE 0.0f

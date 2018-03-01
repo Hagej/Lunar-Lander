@@ -66,10 +66,12 @@ void LanderBehaviourComponent::Update(float dt) {
 	}
 	if (keys.left && !keys.right) {
 		b2Body* body = lander->GetBody();
+		body->SetAngularVelocity(body->GetAngularVelocity() * 0.9f);
 		body->SetTransform(body->GetPosition(), body->GetAngle() + (LANDER_ROTATION_SPEED * dt));
 	}
 	if (keys.right && !keys.left) {
 		b2Body* body = lander->GetBody();
+		body->SetAngularVelocity(body->GetAngularVelocity() * 0.9f);
 		body->SetTransform(body->GetPosition(), body->GetAngle() - (LANDER_ROTATION_SPEED * dt));
 	}
 }
