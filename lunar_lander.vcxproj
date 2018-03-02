@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avancezlib.cpp" />
+    <ClCompile Include="collision_callback.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="ground.cpp" />
     <ClCompile Include="lunarlander.cpp" />

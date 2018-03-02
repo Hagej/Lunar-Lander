@@ -1,21 +1,28 @@
 #pragma once
 
-#include "Box2D\Box2D.h"
-#include "lander.h"
+#include "system_defs.h"
 
-// TODO: Remove this include
-#include <string>
+#include "Box2D\Box2D.h"
+#include "game_defs.h"
+#include "SDL.h"
+#include <set>
+
 
 class CollisionCallback : public b2ContactListener {
 
-	void BeginContact(b2Contact* contact) {
+	std::set<b2Body*>* bodies_tbd;
+	std::set<b2Joint*>* joints_tbd;
 
-		SDL_Log("Crashtesting commence!");
+public:
 
-		b2Body* body = contact->GetFixtureA()->GetBody();
-		void* bodyUserData = body->GetUserData();
+	void Init(std::set<b2Body*>* bodies_tbd, std::set<b2Joint*>* joints_tbd);
 
-		if (bodyUserData) {
+private:
+
+	void BeginContact(b2Contact* contact);
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+
+		/*if (bodyUserData) {
 
 			Lander* lander = static_cast<Lander*>(bodyUserData);
 			if (lander->m_enabled) {
@@ -46,6 +53,5 @@ class CollisionCallback : public b2ContactListener {
 					lander->Land();
 				}
 			}
-		}
-	}
+		}*/
 };

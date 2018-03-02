@@ -15,6 +15,8 @@ class LunarLander : public Game {
 	CollisionCallback collision;
 
 	std::set<GameObject*> lander_gos;
+	std::set<b2Body*> bodies_tbd;
+	std::set<b2Joint*> joints_tbd;
 	b2Body* lander_core;
 	b2Body* groundBody;
 

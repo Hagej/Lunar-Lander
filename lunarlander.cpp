@@ -20,6 +20,15 @@ void LunarLander::Update(float dt) {
 
 	for (auto go : game_objects)
 		go->Update(dt);
+
+	for (b2Joint* j : joints_tbd) {
+		world->DestroyJoint(j);
+	}
+	joints_tbd.clear();
+	for (b2Body* b : bodies_tbd) {
+		world->DestroyBody(b);
+	}
+	bodies_tbd.clear();
 }
 
 void LunarLander::Draw() {
@@ -73,6 +82,7 @@ void LunarLander::InitWorld() {
 	world = new b2World(gravity);
 
 	collision = CollisionCallback();
+	collision.Init(&bodies_tbd, &joints_tbd);
 	world->SetContactListener(&collision);
 
 	b2BodyDef groundDef;
@@ -107,7 +117,7 @@ void LunarLander::InitWorld() {
 	
 }
 
-// Initializes the Lander game object and b2Body
+// Initializes the Lander game objects and b2Bodies
 void LunarLander::InitLander() { 
 
 	lander = new Lander();	// Construct lander game object
@@ -122,6 +132,8 @@ void LunarLander::InitLander() {
 		b2PolygonShape shape;
 		shape.SetAsBox(LANDER_HALF_WIDTH, LANDER_HALF_HEIGHT);
 		lander_core->CreateFixture(&shape, LANDER_DENSITY);
+
+		lander_core->SetUserData((void*)1);
 	}
 
 	std::set<b2Body*> lander_legs;
@@ -137,6 +149,7 @@ void LunarLander::InitLander() {
 		bd.position.Set(LANDER_START_X-(LANDER_HALF_WIDTH + 4.0f), LANDER_START_Y-LANDER_HALF_HEIGHT);
 		left_leg = world->CreateBody(&bd);
 		left_leg->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg->SetUserData((void*)2);
 
 		lander_legs.insert(left_leg);
 
@@ -154,6 +167,7 @@ void LunarLander::InitLander() {
 		bd2.position.Set(LANDER_START_X -(LANDER_HALF_WIDTH + 4.0f * 3), LANDER_START_Y-LANDER_HALF_HEIGHT);
 		left_leg_end = world->CreateBody(&bd2);
 		left_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg_end->SetUserData((void*)2);
 
 		lander_legs.insert(left_leg_end);
 
@@ -179,6 +193,7 @@ void LunarLander::InitLander() {
 		bd.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f , LANDER_START_Y -LANDER_HALF_HEIGHT);
 		right_leg = world->CreateBody(&bd);
 		right_leg->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg->SetUserData((void*)2);
 
 		lander_legs.insert(right_leg);
 
@@ -196,6 +211,8 @@ void LunarLander::InitLander() {
 		bd2.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 3, LANDER_START_Y -LANDER_HALF_HEIGHT);
 		right_leg_end = world->CreateBody(&bd2);
 		right_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg_end->SetUserData((void*)2);
+
 		lander_legs.insert(right_leg_end);
 
 		b2RevoluteJointDef rjd2;
