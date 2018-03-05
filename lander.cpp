@@ -24,9 +24,6 @@ int Lander::Land() {
 
 void Lander::Destroy() {
 	Send(CRASH);
-	m_body->GetWorld()->DestroyBody(m_body);
-	m_body->SetUserData(NULL);
-	m_body = NULL;
 	this->m_enabled = false;
 	GameObject::Destroy();
 
@@ -44,7 +41,7 @@ void LanderBehaviourComponent::Update(float dt) {
 
 	Lander* lander = (Lander *)m_go;
 
-	if (lander->IsCrashing()) {
+	if (lander->GetBody() == NULL) {
 		lander->Destroy();
 		return;
 	}

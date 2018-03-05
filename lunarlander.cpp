@@ -132,6 +132,7 @@ void LunarLander::InitLander() {
 		b2PolygonShape shape;
 		shape.SetAsBox(LANDER_HALF_WIDTH, LANDER_HALF_HEIGHT);
 		lander_core->CreateFixture(&shape, LANDER_DENSITY);
+		lander_core->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
 
 		lander_core->SetUserData((void*)1);
 	}
@@ -147,8 +148,10 @@ void LunarLander::InitLander() {
 		b2BodyDef bd;
 		bd.type = b2_dynamicBody;
 		bd.position.Set(LANDER_START_X-(LANDER_HALF_WIDTH + 4.0f), LANDER_START_Y-LANDER_HALF_HEIGHT);
+		
 		left_leg = world->CreateBody(&bd);
 		left_leg->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
 		left_leg->SetUserData((void*)2);
 
 		lander_legs.insert(left_leg);
@@ -157,8 +160,8 @@ void LunarLander::InitLander() {
 		rjd.Initialize(lander_core, left_leg, b2Vec2(LANDER_START_X-LANDER_HALF_WIDTH, LANDER_START_Y-LANDER_HALF_HEIGHT));
 		rjd.referenceAngle = 30 * DEGTORAD;
 		rjd.enableLimit = true;
-		rjd.lowerAngle = -2 * DEGTORAD;
-		rjd.upperAngle = 2 * DEGTORAD;
+		rjd.lowerAngle = 0 * DEGTORAD;
+		rjd.upperAngle = 0 * DEGTORAD;
 		world->CreateJoint(&rjd);
 
 		b2Body* left_leg_end = NULL;
@@ -167,6 +170,7 @@ void LunarLander::InitLander() {
 		bd2.position.Set(LANDER_START_X -(LANDER_HALF_WIDTH + 4.0f * 3), LANDER_START_Y-LANDER_HALF_HEIGHT);
 		left_leg_end = world->CreateBody(&bd2);
 		left_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg_end->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
 		left_leg_end->SetUserData((void*)2);
 
 		lander_legs.insert(left_leg_end);
@@ -175,8 +179,8 @@ void LunarLander::InitLander() {
 		rjd2.Initialize(left_leg, left_leg_end, b2Vec2(LANDER_START_X -(LANDER_HALF_WIDTH + 4.0f * 2), LANDER_START_Y-LANDER_HALF_HEIGHT));
 		rjd2.referenceAngle = 30 * DEGTORAD;
 		rjd2.enableLimit = true;
-		rjd2.lowerAngle = -2 * DEGTORAD;
-		rjd2.upperAngle = 2 * DEGTORAD;
+		rjd2.lowerAngle = 0 * DEGTORAD;
+		rjd2.upperAngle = 0 * DEGTORAD;
 		world->CreateJoint(&rjd2);
 
 	}
@@ -193,6 +197,7 @@ void LunarLander::InitLander() {
 		bd.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f , LANDER_START_Y -LANDER_HALF_HEIGHT);
 		right_leg = world->CreateBody(&bd);
 		right_leg->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
 		right_leg->SetUserData((void*)2);
 
 		lander_legs.insert(right_leg);
@@ -201,8 +206,8 @@ void LunarLander::InitLander() {
 		rjd.Initialize(lander_core, right_leg, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH, LANDER_START_Y -LANDER_HALF_HEIGHT));
 		rjd.referenceAngle = -30 * DEGTORAD;
 		rjd.enableLimit = true;
-		rjd.lowerAngle = 2 * DEGTORAD;
-		rjd.upperAngle = -2 * DEGTORAD;
+		rjd.lowerAngle = 0 * DEGTORAD;
+		rjd.upperAngle = 0 * DEGTORAD;
 		world->CreateJoint(&rjd);
 
 		b2Body* right_leg_end = NULL;
@@ -211,17 +216,17 @@ void LunarLander::InitLander() {
 		bd2.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 3, LANDER_START_Y -LANDER_HALF_HEIGHT);
 		right_leg_end = world->CreateBody(&bd2);
 		right_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg_end->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
 		right_leg_end->SetUserData((void*)2);
 
 		lander_legs.insert(right_leg_end);
 
 		b2RevoluteJointDef rjd2;
 		rjd2.Initialize(right_leg, right_leg_end, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 2, LANDER_START_Y-LANDER_HALF_HEIGHT));
-		//rjd2.collideConnected = true;
 		rjd2.referenceAngle = -30 * DEGTORAD;
 		rjd2.enableLimit = true;
-		rjd2.lowerAngle = 2 * DEGTORAD;
-		rjd2.upperAngle = -2 * DEGTORAD;
+		rjd2.lowerAngle = 0 * DEGTORAD;
+		rjd2.upperAngle = 0 * DEGTORAD;
 		world->CreateJoint(&rjd2);
 	}
 
