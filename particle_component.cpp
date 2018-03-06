@@ -35,8 +35,7 @@ void ParticleComponent::LaunchParticle(b2Vec2 pos, float angle) {
 		def.linearVelocity = dir;
 		p->m_body = world->CreateBody(&def);
 		p->m_body->CreateFixture(&fdef);
-		float life_time = PARTICLE_LIFE * static_cast<float> (rand()) / (static_cast<float> (RAND_MAX / (1.0f - PARTICLE_LIFE_VARIATION)));
-		p->Init(1000.0f);
+		p->Init(PARTICLE_LIFE);
 
 		active_particles.insert(p);
 	}
