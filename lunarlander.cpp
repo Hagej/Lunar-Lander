@@ -269,6 +269,7 @@ void LunarLander::InitLander() {
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);
+	lander->AddComponent(particles);
 	lander->AddReceiver(this);
 	game_objects.insert(lander);
 

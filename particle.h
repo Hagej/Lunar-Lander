@@ -11,6 +11,5 @@ public:
 	float life;
 	float life_time;
 
-	void Create();
 	void Init(float life);
 };
