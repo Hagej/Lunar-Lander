@@ -10,7 +10,7 @@ void Lander::Create(b2Vec2 size, b2Body* body) {
 	GameObject::Create(size);
 
 	m_body = body;
-	m_size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
+	m_size = b2Vec2(LANDER_HALF_WIDTH * 2, LANDER_HALF_HEIGHT * 2);
 }
 
 int Lander::Crash() {
@@ -24,9 +24,6 @@ int Lander::Land() {
 
 void Lander::Destroy() {
 	Send(CRASH);
-	/*m_body->GetWorld()->DestroyBody(m_body);
-	m_body->SetUserData(NULL);
-	m_body = nullptr;*/
 	this->m_enabled = false;
 	GameObject::Destroy();
 
@@ -44,7 +41,7 @@ void LanderBehaviourComponent::Update(float dt) {
 
 	Lander* lander = (Lander *)m_go;
 
-	if (lander->IsCrashing()) {
+	if (lander->GetBody() == NULL) {
 		lander->Destroy();
 		return;
 	}
@@ -56,7 +53,7 @@ void LanderBehaviourComponent::Update(float dt) {
 		lander->SetFiring(true);
 
 		b2Body* body = lander->GetBody();
-		float32 angle = body->GetAngle() + M_PI / 2;
+		float32 angle = body->GetAngle() + M_PI/2;
 		b2Vec2 vec = b2Vec2(cos(angle), sin(angle));
 		vec.Normalize();
 
@@ -66,10 +63,12 @@ void LanderBehaviourComponent::Update(float dt) {
 	}
 	if (keys.left && !keys.right) {
 		b2Body* body = lander->GetBody();
+		body->SetAngularVelocity(body->GetAngularVelocity() * 0.9f);
 		body->SetTransform(body->GetPosition(), body->GetAngle() + (LANDER_ROTATION_SPEED * dt));
 	}
 	if (keys.right && !keys.left) {
 		b2Body* body = lander->GetBody();
+		body->SetAngularVelocity(body->GetAngularVelocity() * 0.9f);
 		body->SetTransform(body->GetPosition(), body->GetAngle() - (LANDER_ROTATION_SPEED * dt));
 	}
 }

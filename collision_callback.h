@@ -1,61 +1,25 @@
 #pragma once
 
-#include "Box2D\Box2D.h"
-#include "lander.h"
+#include "system_defs.h"
 
-// TODO: Remove this include
-#include <string>
+#include "Box2D\Box2D.h"
+#include "game_defs.h"
+#include "SDL.h"
+#include <set>
+
 
 class CollisionCallback : public b2ContactListener {
 
-	void BeginContact(b2Contact* contact) {
+	std::set<b2Body*>* bodies_tbd;
+	std::set<b2Joint*>* joints_tbd;
 
-		SDL_Log("Crashtesting commence!");
+public:
 
-		b2Body* body = contact->GetFixtureA()->GetBody();
-		void* bodyUserData = body->GetUserData();
+	void Init(std::set<b2Body*>* bodies_tbd, std::set<b2Joint*>* joints_tbd);
 
-		if (bodyUserData) {
+private:
 
-			Lander* lander = static_cast<Lander*>(bodyUserData);
-			if (lander->m_enabled) {
-				float32 vel = lander->GetBody()->GetLinearVelocity().Length();
-				if (vel > LANDER_CRASH_THRESHOLD) {
-					SDL_Log("Lander crashed");
-					lander->Crash();
-				}
-				else {
-					SDL_Log("THE FALCON HAS LANDED!!!");
-					lander->Land();
-				}
-			}
-			
-		}
-
-		body = contact->GetFixtureB()->GetBody();
-		bodyUserData = body->GetUserData();
-
-		if (bodyUserData) {
-			Lander* lander = static_cast<Lander*>(bodyUserData);
-			if (lander->m_enabled) {
-				float32 vel = lander->GetBody()->GetLinearVelocity().Length();
-				if (vel > LANDER_CRASH_THRESHOLD) {
-					SDL_Log("Lander crashed");
-					lander->Crash();
-				}
-				else {
-					SDL_Log("THE FALCON HAS LANDED!!!");
-					lander->Land();
-				}
-			}
-		}
-		
-
-	}
-
-	void PreSolve(b2Contact* contact, const b2Manifold* old_manifold) {
-
-
-	}
+	void BeginContact(b2Contact* contact);
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 };

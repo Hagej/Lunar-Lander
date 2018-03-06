@@ -39,10 +39,14 @@
     <ClCompile Include="physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="particle_system.cpp">
+=======
+    <ClCompile Include="collision_callback.cpp">
+>>>>>>> master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,11 +1,13 @@
 #include "game_object.h"
 #include "component.h"
 #include "avancezlib.h"
+#include "system_defs.h"
 
 void GameObject::Create(b2Vec2 size)
 {
+#if LOG
 	SDL_Log("GameObject::Create");
-
+#endif
 	m_size = size;
 	m_enabled = false;
 	m_angle = 0;
@@ -19,7 +21,9 @@ void GameObject::AddComponent(Component * component)
 
 void GameObject::Init()
 {
+#if LOG
 	SDL_Log("GameObject::Init");
+#endif
 
 	for (auto it : m_components)
 		it->Init();
@@ -44,7 +48,9 @@ void GameObject::Destroy()
 
 GameObject::~GameObject()
 {
+#if LOG
 	SDL_Log("GameObject::~GameObject");
+#endif
 }
 
 void GameObject::AddReceiver(GameObject * go)
