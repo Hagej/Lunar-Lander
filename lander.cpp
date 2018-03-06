@@ -10,7 +10,6 @@ void Lander::Create(b2Vec2 size, b2Body* body) {
 	GameObject::Create(size);
 
 	m_body = body;
-	m_size = b2Vec2(LANDER_HALF_WIDTH * 2, LANDER_HALF_HEIGHT * 2);
 }
 
 int Lander::Crash() {
@@ -73,13 +72,15 @@ void LanderBehaviourComponent::Update(float dt) {
 	}
 }
 
-void LanderRenderComponent::Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects, const char* lander_sprite, std::set<const char*>* sprites) {
+void LanderRenderComponent::Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects, const char* lander_sprite, const char** sprites, int num_sprites) {
 	Component::Create(system, go, game_objects);
 
+	this->num_sprites = num_sprites;
+	m_sprites = new Sprite* [num_sprites];
+
 	m_default_sprite = system->createSprite(lander_sprite);
-	int i = 0;
-	for (const char* ch : *sprites) {
-		m_sprites.insert(system->createSprite(ch));
+	for (int i = 0; i < num_sprites; i++) {
+		m_sprites[i] = system->createSprite(sprites[i]);
 	}
 }
 
@@ -89,7 +90,9 @@ void LanderRenderComponent::Update(float dt) {
 		return;
 	}
 	if (((Lander *)m_go)->IsFiring()) {
-		(*(m_sprites.begin()))->draw(int(m_go->m_horizontalPosition), int(m_go->m_verticalPosition), m_go->m_angle);
+		b2Vec2 pos = ((Lander*)m_go)->GetBody()->GetPosition();
+		m_sprites[animation]->draw(pos.x, pos.y, m_go->m_angle, m_go->GetSize().x, m_go->GetSize().y);
+		animation = (animation + 1) % num_sprites;
 	} else {
 		m_default_sprite->draw(int(m_go->m_horizontalPosition), int(m_go->m_verticalPosition), m_go->m_angle);
 	}

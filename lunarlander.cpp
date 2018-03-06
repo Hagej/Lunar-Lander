@@ -240,7 +240,7 @@ void LunarLander::InitLander() {
 		RenderComponent* render = new RenderComponent();
 		render->Create(system, go, &game_objects, "data/leg_ph.bmp");
 
-		go->Create(b2Vec2(8.0f, 2.0f));
+		go->Create(b2Vec2(8.0f, 1.0f));
 		go->AddComponent(physics);
 		go->AddComponent(render);
 		game_objects.insert(go);
@@ -253,18 +253,17 @@ void LunarLander::InitLander() {
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
 	behaviour->Create(system, lander, &game_objects);
 
-	std::set<const char*>* sprites;
-	sprites = new std::set<const char*>();
-	sprites->insert("data/Lander_firing.bmp");
+
+	const char* sprites[] = { "data/Lander_firing_01.bmp", "data/Lander_firing_02.bmp", "data/Lander_firing_03.bmp" };
+	int amount = 3;
 
 	LanderRenderComponent* render = new LanderRenderComponent();
-	render->Create(system, lander, &game_objects, "data/PH-lander.bmp", sprites);
+	render->Create(system, lander, &game_objects, "data/lander.bmp", sprites, amount);
 
 	ParticleComponent* particles = new ParticleComponent();
 	particles->Create(system, lander, &game_objects, world, &bodies_tbd);
 
-	b2Vec2 size = b2Vec2(LANDER_HALF_WIDTH * 2, LANDER_HALF_HEIGHT * 2);
-
+	b2Vec2 size = b2Vec2(40.0f, 60.0f);
 
 	lander->Create(size, lander_core);
 	lander->AddComponent(physics);

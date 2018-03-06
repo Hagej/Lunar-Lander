@@ -24,7 +24,6 @@ void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<Game
 void ParticleComponent::LaunchParticle(b2Vec2 pos, float angle) {
 	Particle* p = particles.FirstAvailable();
 	if (p != NULL) {
-		pos.y -= 20.0f;
 		def.position = pos;
 		b2Vec2 dir;
 		angle -= PARTICLE_ANGLE_VARIATION / 2.0f;
@@ -50,7 +49,7 @@ void ParticleComponent::Update(float dt) {
 			bodies_tbd->insert(p->m_body);
 			p->m_enabled = false;
 		} else {
-			sprite->draw(p->m_body->GetPosition().x, WINDOW_HEIGHT - p->m_body->GetPosition().y, p->m_body->GetAngle() - M_PI);
+			sprite->draw(p->m_body->GetPosition().x, WINDOW_HEIGHT - p->m_body->GetPosition().y, p->m_body->GetAngle());
 		}
 	}
 	for (Particle* p : inactive) {
@@ -61,7 +60,12 @@ void ParticleComponent::Update(float dt) {
 		elapsed += dt;
 		int particlesThisFrame = PARTICLES_PER_SECOND * elapsed;
 		for (int i = 0; i < particlesThisFrame; i++) {
-			LaunchParticle(lander->GetBody()->GetPosition(), lander->GetBody()->GetAngle() - M_PI / 2.0f);
+			float angle = lander->GetBody()->GetAngle() - M_PI / 2.0f;
+			b2Vec2 pos = lander->GetBody()->GetPosition();
+			SDL_Log("Angle: %f", angle * (180.0f / M_PI));
+			pos.x = pos.x + cos(angle) * 20.0f;
+			pos.y = pos.y + sin(angle) * 20.0f;
+			LaunchParticle(pos, angle);
 			elapsed -= 1.0f / PARTICLES_PER_SECOND;
 		}
 	} else {

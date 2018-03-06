@@ -26,8 +26,8 @@
     <ClInclude Include="lunarlander.h" />
     <ClInclude Include="object_pool.h" />
     <ClInclude Include="particle.h" />
-    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="system_defs.h" />
     <ClInclude Include="particle_component.h" />
+    <ClInclude Include="physics_component.h" />
   </ItemGroup>
 </Project>

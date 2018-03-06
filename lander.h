@@ -11,6 +11,7 @@ class Lander : public GameObject {
 	bool is_crashing = false;
 	bool is_firing = false;
 
+
 public:
 
 	void Create(b2Vec2 size, b2Body* body);
@@ -38,11 +39,14 @@ public:
 class LanderRenderComponent : public Component {
 
 	Sprite* m_default_sprite;
-	std::set<Sprite *> m_sprites;
+	Sprite** m_sprites;
+
+	int animation;
+	int num_sprites;
 
 
 public:
 
-	virtual void Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects, const char* lander_sprite, std::set<const char*>* sprites);
+	virtual void Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects, const char* lander_sprite, const char** sprites, int num_sprites);
 	virtual void Update(float dt);
 };
