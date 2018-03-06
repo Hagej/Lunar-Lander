@@ -19,14 +19,15 @@ void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<Game
 	srand(time(NULL));
 }
 
-void ParticleComponent::LaunchParticle(b2Vec2 pos, float32 angle) {
+void ParticleComponent::LaunchParticle(b2Vec2 pos, float angle) {
 	Particle* p = particles.FirstAvailable();
 	if (p) {
 		pos.y -= 20.0f;
 		def.position = pos;
 		b2Vec2 dir;
-		angle = (angle - PARTICLE_ANGLE_VARIATION / 2.0f) + (static_cast<float> (rand()) / static_cast<float>(RAND_MAX / PARTICLE_ANGLE_VARIATION));
-		float speed = PARTICLE_MIN_VELOCITY + static_cast<float> (rand()) / static_cast<float>(RAND_MAX / PARTICLE_MAX_VELOCITY - PARTICLE_MIN_VELOCITY);
+		angle -= PARTICLE_ANGLE_VARIATION / 2.0f;
+		angle += static_cast<float> (rand()) / (static_cast<float>(RAND_MAX / PARTICLE_ANGLE_VARIATION));
+		float speed = PARTICLE_MIN_VELOCITY + static_cast<float> (rand()) / static_cast<float>(RAND_MAX / (PARTICLE_MAX_VELOCITY - PARTICLE_MIN_VELOCITY));
 		dir.x = cos(angle) * speed;
 		dir.y = sin(angle) * speed;
 		def.linearVelocity = dir;
@@ -42,7 +43,6 @@ void ParticleComponent::LaunchParticle(b2Vec2 pos, float32 angle) {
 void ParticleComponent::Update(float dt) {
 	std::set<Particle*> inactive;
 	for (Particle* p : active_particles) {
-		//SDL_Log("Particles active: %d", active_particles.size());
 		p->life_time += dt;
 		if (p->life < p->life_time) {
 			inactive.insert(p);
@@ -60,7 +60,7 @@ void ParticleComponent::Update(float dt) {
 		elapsed += dt;
 		int particlesThisFrame = PARTICLES_PER_SECOND * elapsed;
 		for (int i = 0; i < particlesThisFrame; i++) {
-			LaunchParticle(lander->GetBody()->GetPosition(), lander->GetBody()->GetAngle());
+			LaunchParticle(lander->GetBody()->GetPosition(), lander->GetBody()->GetAngle() - M_PI / 2.0f);
 			elapsed -= 1.0f / PARTICLES_PER_SECOND;
 		}
 	} else {

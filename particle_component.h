@@ -32,5 +32,5 @@ public:
 	void Update(float dt);
 
 private:
-	void LaunchParticle(b2Vec2 pos, float32 angle);
+	void LaunchParticle(b2Vec2 pos, float angle);
 };
