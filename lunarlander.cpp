@@ -97,6 +97,7 @@ void LunarLander::InitWorld() {
 	b2FixtureDef groundFixture;
 	groundFixture.shape = &groundShape;
 	groundFixture.friction = 1.0f;
+	groundFixture.filter.categoryBits = 0x0004;
 
 	groundBody->CreateFixture(&groundFixture);
 

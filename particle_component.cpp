@@ -12,16 +12,18 @@ void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<Game
 
 	def.type = b2_dynamicBody;
 	
-	shape.m_radius = 0.5f;
+	shape.m_radius = 1.0f;
 	fdef.shape = &shape;
-	fdef.filter.categoryBits = 0x0002;
+	fdef.density = 1.0f;
+	fdef.restitution = 0.15f;
+	fdef.filter.maskBits = 0x0004;
 
 	srand(time(NULL));
 }
 
 void ParticleComponent::LaunchParticle(b2Vec2 pos, float angle) {
 	Particle* p = particles.FirstAvailable();
-	if (p) {
+	if (p != NULL) {
 		pos.y -= 20.0f;
 		def.position = pos;
 		b2Vec2 dir;
@@ -34,7 +36,7 @@ void ParticleComponent::LaunchParticle(b2Vec2 pos, float angle) {
 		p->m_body = world->CreateBody(&def);
 		p->m_body->CreateFixture(&fdef);
 		float life_time = PARTICLE_LIFE * static_cast<float> (rand()) / (static_cast<float> (RAND_MAX / (1.0f - PARTICLE_LIFE_VARIATION)));
-		p->Init(1.0f);
+		p->Init(1000.0f);
 
 		active_particles.insert(p);
 	}
