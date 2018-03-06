@@ -4,7 +4,8 @@
 #include "Box2D/Box2D.h"
 #include "collision_callback.h"
 
-#include "PhysicsComponent.h"
+#include "physics_component.h"
+#include "particle_component.h"
 
 #include "lander.h"
 #include "ground.h"

@@ -146,6 +146,9 @@ void LunarLander::InitLander() {
 	LanderRenderComponent* render = new LanderRenderComponent();
 	render->Create(system, lander, &game_objects, "data/PH-lander.bmp", sprites);
 
+	ParticleComponent* particles = new ParticleComponent();
+	particles->Create(system, lander, &game_objects, world, bodies_tbd);
+
 	b2Vec2 size = b2Vec2(LANDER_WIDTH, LANDER_HEIGHT);
 
 	lander->Create(size, landerBody);

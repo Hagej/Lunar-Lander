@@ -46,8 +46,8 @@ public:
 	T* FirstAvailable()
 	{
 		for (auto it : m_pool)
-			if (!(**it).enabled)
-				return (*it);
+			if (!(*it).m_enabled)
+				return it;
 
 		// if it reaches this point, there is no available object in the pool
 		return NULL;

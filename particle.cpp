@@ -1,8 +1,10 @@
 #include "particle.h"
 
+void Particle::Create() {
+	GameObject::Create(b2Vec2(0.1f, 0.1f));
+}
 
-void Particle::Create(b2Vec2 pos, b2Vec2 vel) {
-
-	b2BodyDef bodyDef;
-
+void Particle::Init(float life) {
+	life_time = 0;
+	this->life = life;
 }
