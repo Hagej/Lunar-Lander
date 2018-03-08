@@ -12,21 +12,14 @@ void Lander::Create(b2Vec2 size, b2Body* body) {
 	m_body = body;
 }
 
-int Lander::Crash() {
-	is_crashing = true;
-	return 0;
-}
-
-int Lander::Land() {
-	return 1;
-}
-
-void Lander::Destroy() {
+void Lander::Crash() {
 	Send(CRASH);
 	this->m_enabled = false;
 	GameObject::Destroy();
+}
 
-	
+void Lander::Land() {
+	Send(LAND);
 }
 
 void LanderBehaviourComponent::Create(AvancezLib* system, Lander* go, std::set<GameObject*>* game_objects) {
@@ -39,10 +32,19 @@ void LanderBehaviourComponent::Update(float dt) {
 	}
 
 	Lander* lander = (Lander *)m_go;
+	b2Body* body = lander->GetBody();
 
-	if (lander->GetBody() == NULL) {
-		lander->Destroy();
+	if (body == NULL) {
+		lander->Crash();
 		return;
+	}
+	if(body->GetLinearVelocity().LengthSquared() == 0) {
+		hover_time += dt;
+		if (hover_time > WIN_TIME) {
+			lander->Land();
+		}
+	} else {
+		hover_time = 0;
 	}
 
 	AvancezLib::KeyStatus keys;
@@ -51,7 +53,6 @@ void LanderBehaviourComponent::Update(float dt) {
 	if (keys.fire) {
 		lander->SetFiring(true);
 
-		b2Body* body = lander->GetBody();
 		float32 angle = body->GetAngle() + M_PI/2;
 		b2Vec2 vec = b2Vec2(cos(angle), sin(angle));
 		vec.Normalize();
@@ -90,8 +91,7 @@ void LanderRenderComponent::Update(float dt) {
 		return;
 	}
 	if (((Lander *)m_go)->IsFiring()) {
-		b2Vec2 pos = ((Lander*)m_go)->GetBody()->GetPosition();
-		m_sprites[animation]->draw(pos.x, pos.y, m_go->m_angle, m_go->GetSize().x, m_go->GetSize().y);
+		m_sprites[animation]->draw(int(m_go->m_horizontalPosition), int(m_go->m_verticalPosition), m_go->m_angle);
 		animation = (animation + 1) % num_sprites;
 	} else {
 		m_default_sprite->draw(int(m_go->m_horizontalPosition), int(m_go->m_verticalPosition), m_go->m_angle);

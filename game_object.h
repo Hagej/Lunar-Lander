@@ -4,7 +4,7 @@
 
 #include "Box2D\Box2D.h"
 
-enum Message { HIT, CRASH, LAND, GAME_OVER, NO_MSG };
+enum Message { CRASH, LAND, GAME_OVER, NO_MSG };
 
 class Component;
 

@@ -62,7 +62,6 @@ void ParticleComponent::Update(float dt) {
 		for (int i = 0; i < particlesThisFrame; i++) {
 			float angle = lander->GetBody()->GetAngle() - M_PI / 2.0f;
 			b2Vec2 pos = lander->GetBody()->GetPosition();
-			SDL_Log("Angle: %f", angle * (180.0f / M_PI));
 			pos.x = pos.x + cos(angle) * 20.0f;
 			pos.y = pos.y + sin(angle) * 20.0f;
 			LaunchParticle(pos, angle);

@@ -24,6 +24,8 @@ class LunarLander : public Game {
 	Lander* lander;
 	Ground* ground;
 
+	bool restart = false;
+
 public:
 
 	void Create(AvancezLib* system, FMOD::Studio::System* fmod_studio);
@@ -35,6 +37,7 @@ public:
 
 private:
 
+	void Restart();
 	void InitWorld();
 	void InitLander();
 };

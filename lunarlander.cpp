@@ -13,6 +13,12 @@ void LunarLander::Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) 
 void LunarLander::Update(float dt) {
 	if (IsGameOver())
 		dt = 0.f;
+	
+	if (restart) {
+		restart = false;
+		Restart();
+		return;
+	}
 
 	world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 	world->DrawDebugData();
@@ -59,20 +65,76 @@ void LunarLander::Destroy() {
 	delete world;
 }
 
+
+void AttachedBodies(b2Body* body, std::set<b2Body*>* bodies) {
+	if (body == NULL) {
+		return;
+	}
+	else if (body->GetJointList() == NULL) {
+		return;
+	}
+	else {
+		b2JointEdge* edge = body->GetJointList();
+		while (edge != NULL) {
+			if (bodies->find(edge->other) == bodies->end()) {
+				bodies->insert(edge->other);
+				AttachedBodies(edge->other, bodies);
+			}
+			edge = edge->next;
+		}
+	}
+}
+
+int InitAttachedBodies(b2Body* body) {
+	std::set<b2Body*> bodies;
+	bodies.insert(body);
+	AttachedBodies(body, &bodies);
+	return bodies.size();
+}
+
+
 void LunarLander::Receive(Message m) {
+	int parts_left;
 	switch (m)
 	{
 	case CRASH:
 		score += 10;
-		//Restart();
+		Restart();
 		break;
 	case LAND:
-		score += 100;
-		//Restart();
+		parts_left = InitAttachedBodies(lander->GetBody());
+		SDL_Log("Parts left: %d", parts_left);
+		score += 20 * parts_left;
+		restart = true;
 		break;
+	case GAME_OVER:
+		game_over = true;
 	default:
 		break;
 	}
+}
+
+
+void LunarLander::Restart() {
+	for (auto go : game_objects)
+		go->Destroy();
+	game_objects.clear();
+
+	b2Body* b = world->GetBodyList();
+	b2Body* next;
+	while (b != NULL) {
+		next = b->GetNext();
+		world->DestroyBody(b);
+		b = next;
+	}
+	delete world;
+	
+	InitWorld();
+	InitLander();
+
+	for (auto go : game_objects)
+		go->Init();
+
 }
 
 // Initialize Box2D world
@@ -137,6 +199,8 @@ void LunarLander::InitLander() {
 
 		lander_core->SetUserData((void*)1);
 	}
+	b2Vec2 size = b2Vec2(40.0f, 40.0f);
+	lander->Create(size, lander_core);
 
 	std::set<b2Body*> lander_legs;
 
@@ -263,9 +327,9 @@ void LunarLander::InitLander() {
 	ParticleComponent* particles = new ParticleComponent();
 	particles->Create(system, lander, &game_objects, world, &bodies_tbd);
 
-	b2Vec2 size = b2Vec2(40.0f, 60.0f);
+	
 
-	lander->Create(size, lander_core);
+	
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);
