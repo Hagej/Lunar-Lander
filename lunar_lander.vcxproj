@@ -33,7 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
-    <ClInclude Include="box.h" />
     <ClInclude Include="collision_callback.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="game_defs.h" />
@@ -46,6 +45,7 @@
     <ClInclude Include="particle.h" />
     <ClInclude Include="particle_component.h" />
     <ClInclude Include="physics_component.h" />
+    <ClInclude Include="raycast_callback.h" />
     <ClInclude Include="system_defs.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

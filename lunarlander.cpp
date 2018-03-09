@@ -20,6 +20,11 @@ void LunarLander::Update(float dt) {
 		return;
 	}
 
+	world->RayCast(&raycast, lander->GetBody()->GetPosition(), b2Vec2(lander->GetBody()->GetPosition().x, 0));
+	b2Vec2 ground_intersect = raycast.m_point;
+	b2Vec2 lander_pos = lander->GetBody()->GetPosition();
+	distance_to_ground = lander_pos.y - ground_intersect.y;
+	
 	world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 	world->DrawDebugData();
 	fmod_studio->update();
@@ -46,7 +51,9 @@ void LunarLander::Draw() {
 	sprintf(msg, "Score: %d", score);
 	system->drawText(100, 32, msg);
 	sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
-	system->drawText(300, 32, msg);
+	system->drawText(250, 32, msg);
+	sprintf(msg, "Altitude: %d", (int)(distance_to_ground));
+	system->drawText(250, 64, msg);
 	sprintf(msg, "Horizontal speed: %d", (int)vel.x);
 	system->drawText(400, 32, msg);
 	sprintf(msg, "Vertical speed: %d", (int)vel.y);
@@ -150,7 +157,6 @@ void LunarLander::InitWorld() {
 	b2BodyDef groundDef;
 	groundDef.position.Set(320.0f, 16.0f);
 	groundDef.type = b2_staticBody;
-
 	groundBody = world->CreateBody(&groundDef);
 
 	b2PolygonShape groundShape;
@@ -162,6 +168,7 @@ void LunarLander::InitWorld() {
 	groundFixture.filter.categoryBits = 0x0004;
 
 	groundBody->CreateFixture(&groundFixture);
+	groundBody->SetUserData((void*) -1);
 
 	ground = new Ground();
 
