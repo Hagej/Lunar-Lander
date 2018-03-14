@@ -216,6 +216,31 @@ void Sprite::draw(int x, int y, float angle)
 		SDL_FLIP_NONE);
 }
 
+void Sprite::draw(int x, int y, float angle, int width, int height)
+{
+	SDL_Rect rect;
+
+	rect.x = x;
+	rect.y = y;
+	rect.w = width;
+	rect.h = height;
+	//SDL_QueryTexture(m_texture, NULL, NULL, &(rect.w), &(rect.h));
+	SDL_Point center;
+	center.x = (int)(rect.w / 2.f);
+	center.y = (int)(rect.h / 2.f);
+
+	//Render texture to screen
+	//	SDL_RenderCopy(renderer, texture, NULL, &rect);
+
+	SDL_RenderCopyEx(m_renderer,
+		m_texture,
+		NULL,
+		&rect,
+		angle,
+		&center,
+		SDL_FLIP_NONE);
+}
+
 
 void Sprite::destroy()
 {

@@ -21,6 +21,7 @@ public:
 	// angle: angle in radians around the center of the sprite
 	// (All sprites are 32*32 pixels, clipping is not supported)
 	void draw(int x, int y, float angle);
+	void draw(int x, int y, float angle, int width, int height);
 };
 
 

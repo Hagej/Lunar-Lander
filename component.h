@@ -2,7 +2,7 @@
 
 #include <set>
 #include "object_pool.h"
-
+#include "camera.h"
 
 class GameObject;
 class AvancezLib;
@@ -29,24 +29,15 @@ public:
 
 class RenderComponent : public Component
 {
-	Sprite* sprite;
+	Sprite* m_sprite;
+	Camera* m_camera;
 
 public:
 
-	virtual void Create(AvancezLib* system, GameObject * go, std::set<GameObject*> * game_objects, const char * sprite_name);
+	virtual void Create(AvancezLib* system, GameObject * go, std::set<GameObject*> * game_objects, Camera* camera, const char * sprite_name);
 	virtual void Update(float dt);
 	virtual void Destroy();
 
-	Sprite * GetSprite() { return sprite; }
-};
-
-
-class CollideComponent : public Component
-{
-	ObjectPool<GameObject> * coll_objects; // collision will be tested with these objects
-
-public:
-	virtual void Create(AvancezLib* system, GameObject * go, std::set<GameObject*> * game_objects, ObjectPool<GameObject> * coll_objects);
-	virtual void Update(float dt);
+	Sprite * GetSprite() { return m_sprite; }
 };
 

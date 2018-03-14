@@ -6,6 +6,7 @@
 #include "component.h"
 #include "Box2D\Box2D.h"
 
+/* Component for updating the position of the game object to where the box2D body is located. */
 class PhysicsComponent : public Component {
 
 	b2Body* m_body;

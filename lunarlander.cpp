@@ -43,21 +43,32 @@ void LunarLander::Update(float dt) {
 }
 
 void LunarLander::Draw() {
-	float angle = lander_core->GetAngle();
-	float x = cos(angle);
-	float y = sin(angle);
-	b2Vec2 vel = lander_core->GetLinearVelocity();
 	char msg[1024];
-	sprintf(msg, "Score: %d", score);
-	system->drawText(100, 32, msg);
-	sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
-	system->drawText(250, 32, msg);
-	sprintf(msg, "Altitude: %d", (int)(distance_to_ground));
-	system->drawText(250, 64, msg);
-	sprintf(msg, "Horizontal speed: %d", (int)vel.x);
-	system->drawText(400, 32, msg);
-	sprintf(msg, "Vertical speed: %d", (int)vel.y);
-	system->drawText(400, 64, msg);
+	if (lander->m_enabled) {
+		float angle = lander_core->GetAngle();
+		float x = cos(angle);
+		float y = sin(angle);
+		b2Vec2 vel = lander_core->GetLinearVelocity();
+		sprintf(msg, "Score: %d", score);
+		system->drawText(100, 32, msg);
+		sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
+		system->drawText(250, 32, msg);
+		sprintf(msg, "Altitude: %d", (int)(distance_to_ground));
+		system->drawText(250, 64, msg);
+		sprintf(msg, "Horizontal speed: %d", (int)vel.x);
+		system->drawText(400, 32, msg);
+		sprintf(msg, "Vertical speed: %d", (int)vel.y);
+		system->drawText(400, 64, msg);
+	} else {
+		sprintf(msg, "Angle: 0");
+		system->drawText(250, 32, msg);
+		sprintf(msg, "Altitude: 0");
+		system->drawText(250, 64, msg);
+		sprintf(msg, "Horizontal speed: 0");
+		system->drawText(400, 32, msg);
+		sprintf(msg, "Vertical speed: 0");
+		system->drawText(400, 64, msg);
+	}
 
 
 	if (IsGameOver())
@@ -173,7 +184,7 @@ void LunarLander::InitWorld() {
 	ground = new Ground();
 
 	RenderComponent* render = new RenderComponent();
-	render->Create(system, ground, &game_objects, "data/ground_box.bmp");
+	render->Create(system, ground, &game_objects, camera, "data/ground_box.bmp");
 
 	PhysicsComponent* physics = new PhysicsComponent();
 	physics->Create(system, ground, &game_objects, groundBody);
@@ -309,7 +320,7 @@ void LunarLander::InitLander() {
 		physics->Create(system, go, &game_objects, b);
 
 		RenderComponent* render = new RenderComponent();
-		render->Create(system, go, &game_objects, "data/leg_ph.bmp");
+		render->Create(system, go, &game_objects, camera, "data/leg_ph.bmp");
 
 		go->Create(b2Vec2(8.0f, 1.0f));
 		go->AddComponent(physics);
@@ -328,8 +339,11 @@ void LunarLander::InitLander() {
 	const char* sprites[] = { "data/Lander_firing_01.bmp", "data/Lander_firing_02.bmp", "data/Lander_firing_03.bmp" };
 	int amount = 3;
 
-	LanderRenderComponent* render = new LanderRenderComponent();
-	render->Create(system, lander, &game_objects, "data/lander.bmp", sprites, amount);
+	/*LanderRenderComponent* render = new LanderRenderComponent();
+	render->Create(system, lander, &game_objects, "data/lander.bmp", sprites, amount);*/
+
+	RenderComponent* render = new RenderComponent();
+	render->Create(system, lander, &game_objects, camera, "data/lander.bmp");
 
 	ParticleComponent* particles = new ParticleComponent();
 	particles->Create(system, lander, &game_objects, world, &bodies_tbd);

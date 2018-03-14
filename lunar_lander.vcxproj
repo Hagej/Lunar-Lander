@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avancezlib.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision_callback.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="ground.cpp" />
@@ -33,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="collision_callback.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="game_defs.h" />

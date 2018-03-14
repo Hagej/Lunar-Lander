@@ -14,13 +14,13 @@ protected:
 	std::vector<GameObject*> m_receivers;
 	std::vector<Component*> m_components;
 
-	b2Vec2 m_size;
 
 public:
 	double m_horizontalPosition;
 	double m_verticalPosition;
 	float m_angle; // angle of rotation in degrees
 	bool m_enabled;
+	b2Vec2 m_size;
 
 	virtual ~GameObject();
 
@@ -33,6 +33,4 @@ public:
 	virtual void AddReceiver(GameObject *go);
 	virtual void Receive(Message m) {}
 	void Send(Message m);
-
-	inline b2Vec2 GetSize() { return m_size; }
 };

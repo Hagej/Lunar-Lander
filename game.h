@@ -24,6 +24,7 @@ protected:
 
 	AvancezLib* system;
 	FMOD::Studio::System* fmod_studio;
+	Camera* camera;
 
 	unsigned int score = 0;
 
@@ -39,6 +40,7 @@ public:
 #endif
 		this->system = system;
 		this->fmod_studio = fmod_studio;
+		camera = new Camera(960, 540, 960, 540);
 		score = 0;
 
 	}

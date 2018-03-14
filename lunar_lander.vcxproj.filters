@@ -12,6 +12,7 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="physics_component.cpp" />
     <ClCompile Include="particle_component.cpp" />
+    <ClCompile Include="camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
@@ -29,5 +30,6 @@
     <ClInclude Include="particle_component.h" />
     <ClInclude Include="physics_component.h" />
     <ClInclude Include="raycast_callback.h" />
+    <ClInclude Include="camera.h" />
   </ItemGroup>
 </Project>
