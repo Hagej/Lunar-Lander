@@ -34,11 +34,11 @@ void Camera::setPosition(const int x, const int y) {
 void Camera::worldToScreen(float32* x, float32* y) {
 	*x -= m_viewport.x;		// x position relative to the camera				
 	*x *= m_zoom;			// Modify according to zoom
-	*x += WINDOW_WIDTH/2;	// Position relative to screen
+	*x += WINDOW_WIDTH/2.0f;	// Position relative to screen
 
 	*y -= m_viewport.y;			// y position relative to the camera
 	*y *= m_zoom;				// Modify according to zoom
-	*y += WINDOW_HEIGHT / 2;	// Position relative to screen
+	*y += WINDOW_HEIGHT/2.0f;	// Position relative to screen
 	*y = WINDOW_HEIGHT - *y;	// Invert y-value to SDL coordinates
 }
 
@@ -51,7 +51,7 @@ void Camera::draw(GameObject* go, Sprite* sprite) {
 	pos.y = go->m_verticalPosition;
 	worldToScreen(&pos.x, &pos.y);
 	pos.x -= width / 2.0f;
-	pos.y += height / 2.0f;
+	pos.y -= height / 2.0f;
 	//SDL_Log("Position: %f, %f", pos.x, pos.y);
 
 	if (pos.x + width*m_zoom < (m_viewport.x - m_viewport.w) 
