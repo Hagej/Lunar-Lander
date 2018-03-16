@@ -2,6 +2,7 @@
 
 #include "system_defs.h"
 #include "game_defs.h"
+#include "SDL.h"
 
 /* Initialize the callback by giving references to sets containing what's to be destroyed */
 void CollisionCallback::Init(std::set<b2Body*>* bodies_tbd, std::set<b2Joint*>* joints_tbd) {
@@ -16,16 +17,17 @@ void CollisionCallback::PreSolve(b2Contact* contact, const b2Manifold* oldManifo
 	bodies.insert(contact->GetFixtureA()->GetBody());
 	bodies.insert(contact->GetFixtureB()->GetBody());
 
+
 	for (b2Body* b : bodies) {
 		int bodyUserData = (int)b->GetUserData();
 		switch (bodyUserData) {
-			case 1:	// Lander core has collided
+			case LANDER_CORE:	// Lander core has collided
 				// Crash lander if impact is too high
 				if (contact->GetManifold()->points[0].normalImpulse > LANDER_CRASH_THRESHOLD) {
 					bodies_tbd->insert(b);	
 				}
 				break;
-			case 2: // A lander leg has collided
+			case LANDER_LEGS: // A lander leg has collided
 			{
 				b2JointEdge * joints = b->GetJointList();
 				while (joints != NULL) {

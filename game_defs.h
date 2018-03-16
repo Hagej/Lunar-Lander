@@ -4,7 +4,21 @@
 #define PHYSICS_TIME_STEP 1.0f / 60.0f
 #define VELOCITY_ITERATIONS 6.0f
 #define POSITION_ITERATIONS 2.0f
+#define GRAVITY_CONSTANT -0.25f
 
+/* Level generator definitions */
+#define MIN_HEIGHT 50
+#define SLICE_MIN_WIDTH 10
+#define SLICE_MAX_WIDTH 30
+#define SLICE_MIN_HEIGHT 5
+#define SLICE_MAX_HEIGHT 50
+#define GOAL_MIN_WIDTH 76
+#define GOAL_MAX_WIDTH 76 * 3
+
+/* User data */
+#define GROUND -1
+#define LANDER_CORE 1
+#define LANDER_LEGS 2
 
 /* Lander definitions */
 #define LANDER_THRUST 300000.0f

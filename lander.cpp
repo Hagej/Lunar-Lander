@@ -1,15 +1,32 @@
 #include "avancezlib.h"
 #include "lander.h"
+
 #include "system_defs.h"
 #include "game_defs.h"
 
+#include "physics_component.h"
+#include "particle_component.h"
+#include "camera_behaviour_component.h"
+
+
+void Lander::Destroy() {
+	LOG("Lander::Destroy")
+	b2World* world = m_body->GetWorld();
+	world->DestroyBody(m_body);
+	for (b2Body* b : m_legs) {
+		world->DestroyBody(b);
+	}
+	GameObject::~GameObject();
+}
 
 /* Create lander game object. */
-void Lander::Create(b2Vec2 size, b2Body* body) {
+void Lander::Create(b2Vec2 size, b2World* world) {
 
 	GameObject::Create(size);
 	LOG("Lander::Create");
-	m_body = body;
+
+	InitBody(world, b2Vec2(LANDER_START_X, LANDER_START_Y));
+
 }
 
 /* Method for when the lander has crashed */
@@ -30,6 +47,124 @@ int Lander::AttachedBodies() {
 	bodies.insert(m_body);				// Insert lander core
 	AttachedBodies(m_body, &bodies);	// Start recursion
 	return bodies.size();
+}
+
+/* Initializes the body of the lander */
+void Lander::InitBody(b2World* world, b2Vec2 pos) {
+	/* Lander body */
+	{
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(pos.x, pos.y);
+		m_body = world->CreateBody(&bd);
+
+		b2PolygonShape shape;
+		shape.SetAsBox(LANDER_HALF_WIDTH, LANDER_HALF_HEIGHT);
+		m_body->CreateFixture(&shape, LANDER_DENSITY);
+		m_body->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
+
+		m_body->SetUserData((void*)LANDER_CORE);	// User data 
+	}
+	/* Lander body end */
+
+	b2PolygonShape shape;
+	shape.SetAsBox(4.0f, 1.0f);
+
+	/* Left leg */
+	{
+		/* Upper left leg */
+		b2Body* left_leg = NULL;
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		// Position leg on the corner of lander body
+		bd.position.Set(LANDER_START_X - (LANDER_HALF_WIDTH + 4.0f), LANDER_START_Y - LANDER_HALF_HEIGHT);
+
+		left_leg = world->CreateBody(&bd);
+		left_leg->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
+		left_leg->SetUserData((void*)LANDER_LEGS);
+
+		m_legs.insert(left_leg);
+
+		/* Joint upper leg - lander body */
+		b2RevoluteJointDef rjd;
+		rjd.Initialize(m_body, left_leg, b2Vec2(LANDER_START_X - LANDER_HALF_WIDTH, LANDER_START_Y - LANDER_HALF_HEIGHT));
+		rjd.referenceAngle = 30 * DEGTORAD;
+		rjd.enableLimit = true;
+		rjd.lowerAngle = 0 * DEGTORAD;
+		rjd.upperAngle = 0 * DEGTORAD;
+		world->CreateJoint(&rjd);
+
+
+		/* Lower left leg */
+		b2Body* left_leg_end = NULL;
+		b2BodyDef bd2;
+		bd2.type = b2_dynamicBody;
+		bd2.position.Set(LANDER_START_X - (LANDER_HALF_WIDTH + 4.0f * 3), LANDER_START_Y - LANDER_HALF_HEIGHT);
+		left_leg_end = world->CreateBody(&bd2);
+		left_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		left_leg_end->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
+		left_leg_end->SetUserData((void*)LANDER_LEGS);
+
+		m_legs.insert(left_leg_end);
+
+		/* Joint lower left leg - upper left leg */
+		b2RevoluteJointDef rjd2;
+		rjd2.Initialize(left_leg, left_leg_end, b2Vec2(LANDER_START_X - (LANDER_HALF_WIDTH + 4.0f * 2), LANDER_START_Y - LANDER_HALF_HEIGHT));
+		rjd2.referenceAngle = 30 * DEGTORAD;
+		rjd2.enableLimit = true;
+		rjd2.lowerAngle = 0 * DEGTORAD;
+		rjd2.upperAngle = 0 * DEGTORAD;
+		world->CreateJoint(&rjd2);
+
+	}
+	/* Left leg end */
+	
+	/* Right leg */
+	{
+
+		/* Upper right leg */
+		b2Body* right_leg = NULL;
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f, LANDER_START_Y - LANDER_HALF_HEIGHT);
+		right_leg = world->CreateBody(&bd);
+		right_leg->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
+		right_leg->SetUserData((void*)2);
+
+		m_legs.insert(right_leg);
+
+		/* Joint upper right leg - lander body */
+		b2RevoluteJointDef rjd;
+		rjd.Initialize(m_body, right_leg, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH, LANDER_START_Y - LANDER_HALF_HEIGHT));
+		rjd.referenceAngle = -30 * DEGTORAD;
+		rjd.enableLimit = true;
+		rjd.lowerAngle = 0 * DEGTORAD;
+		rjd.upperAngle = 0 * DEGTORAD;
+		world->CreateJoint(&rjd);
+
+		/* Lower right leg */
+		b2Body* right_leg_end = NULL;
+		b2BodyDef bd2;
+		bd2.type = b2_dynamicBody;
+		bd2.position.Set(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 3, LANDER_START_Y - LANDER_HALF_HEIGHT);
+		right_leg_end = world->CreateBody(&bd2);
+		right_leg_end->CreateFixture(&shape, LANDER_DENSITY);
+		right_leg_end->GetFixtureList()->SetRestitution(LANDER_RESTITUTION);
+		right_leg_end->SetUserData((void*)2);
+
+		m_legs.insert(right_leg_end);
+
+		/* Joint lower right leg - upper right leg */
+		b2RevoluteJointDef rjd2;
+		rjd2.Initialize(right_leg, right_leg_end, b2Vec2(LANDER_START_X + LANDER_HALF_WIDTH + 4.0f * 2, LANDER_START_Y - LANDER_HALF_HEIGHT));
+		rjd2.referenceAngle = -30 * DEGTORAD;
+		rjd2.enableLimit = true;
+		rjd2.lowerAngle = 0 * DEGTORAD;
+		rjd2.upperAngle = 0 * DEGTORAD;
+		world->CreateJoint(&rjd2);
+	}
 }
 
 void Lander::AttachedBodies(b2Body* body, std::set<b2Body*>* bodies) {
@@ -67,12 +202,6 @@ void LanderBehaviourComponent::Update(float dt) {
 
 	Lander* lander = (Lander *)m_go;
 	b2Body* body = lander->GetBody();
-
-	// TODO: Better crash animation/sequence
-	if (body == NULL) {
-		lander->Crash();
-		return;
-	}
 
 	b2Vec2 lander_pos = body->GetPosition();
 	body->GetWorld()->RayCast(&raycast, lander_pos, b2Vec2(lander_pos.x, 0)); // Cast a ray from the position of the lander to the bottom of the level

@@ -72,7 +72,7 @@ void Camera::Draw(GameObject* go, Sprite* sprite) {
 	pos.y -= height / 2.0f;				// Subtract as SDL has its origo in the upper left corner
 
 	
-	sprite->draw(pos.x, pos.y, go->m_angle, go->m_size.x * m_zoom, go->m_size.y * m_zoom);
+	sprite->draw(pos.x, pos.y, go->m_angle, width, height);
 }
 
 

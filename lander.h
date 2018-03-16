@@ -7,15 +7,19 @@
 
 class Lander : public GameObject {
 
-	b2Body* m_body;				// The main body of the lander
+	b2Body* m_body;					// The main body of the lander
+	std::set<b2Body*> m_legs; // The bodies of the legs of the lander
+
 	bool is_firing = false;		// TODO: Change to status enum instead?
 	float m_altitude;
 
+
 public:
 
-	void Create(b2Vec2 size, b2Body* body);
+	void Create(b2Vec2 size, b2World* world);
 
 	inline b2Body* GetBody() { return m_body; }
+	inline std::set<b2Body*> GetLegs() { return m_legs; }
 	inline float GetAltitude() { return m_altitude; }
 	inline void SetAltitude(float altitude) { m_altitude = altitude; }
 	inline bool IsFiring() { return is_firing; }
@@ -23,10 +27,13 @@ public:
 	void Land();
 	void Crash();
 
+	void Destroy();
+
 	int AttachedBodies();
 
 private: 
 
+	void InitBody(b2World* world, b2Vec2 pos);
 	void AttachedBodies(b2Body* body, std::set<b2Body*>*bodies);
 
 };

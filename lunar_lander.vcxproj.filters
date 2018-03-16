@@ -14,6 +14,7 @@
     <ClCompile Include="particle_component.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_behaviour_component.cpp" />
+    <ClCompile Include="level_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
@@ -33,5 +34,6 @@
     <ClInclude Include="raycast_callback.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_behaviour_component.h" />
+    <ClInclude Include="level_handler.h" />
   </ItemGroup>
 </Project>

@@ -9,22 +9,22 @@
 #include "particle_component.h"
 #include "camera_behaviour_component.h"
 
+#include "level_handler.h"
 #include "lander.h"
 #include "ground.h"
 
 /* Main class for the Lunar Lander game*/
 class LunarLander : public Game {
 
-	b2World * world;
 	CollisionCallback collision;
 
 	std::set<b2Body*> bodies_tbd;	// Bodies to be destroyed next update
-	std::set<b2Joint*> joints_tbd;	// Joints to be destroyed next update
-	b2Body* lander_core;			
-	b2Body* groundBody;
+	std::set<b2Joint*> joints_tbd;	// Joints to be destroyed next update	
+
+	b2World* world;		// The Box2D world
+	LevelHandler level_handler;	// Class for handling levels
 
 	Lander* lander;
-	Ground* ground;
 
 	bool restart = false;
 
@@ -40,6 +40,6 @@ public:
 private:
 
 	void Restart();
-	void InitWorld();
 	void InitLander();
+	void InitWorld();
 };

@@ -5,10 +5,10 @@
 void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2World* world, std::set<b2Body*>* bodies_tbd, Camera* camera) {
 	Component::Create(system, go, game_objects);
 
+	this->world = world;
 	this->camera = camera;		// Used for rendering in the right location
 
 	sprite = system->createSprite("data/particle.bmp");	// Same sprite used for every particle
-	this->world = world;	
 	particles.Create(PARTICLE_MAX_AMOUNT);		// Creates all particles
 
 	this->bodies_tbd = bodies_tbd;

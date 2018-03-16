@@ -32,6 +32,7 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="particle_component.cpp" />
     <ClCompile Include="physics_component.cpp" />
+    <ClCompile Include="level_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avancezlib.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="physics_component.h" />
     <ClInclude Include="raycast_callback.h" />
     <ClInclude Include="system_defs.h" />
+    <ClInclude Include="level_handler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -16,3 +16,4 @@
 
 /* Math definitions */
 #define DEGTORAD M_PI/180.0f
+#define RADTODEG 180.f/M_PI
