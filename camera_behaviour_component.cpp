@@ -11,12 +11,14 @@ void CameraBehaviourComponent::Update(float dt) {
 	Lander* lander = (Lander*)m_go;
 
 	if (m_camera->getZoom() != ZOOM_AMOUNT) {
+		/* If the lander gets close enough to the ground, zoom in */
 		if (lander->distance_to_ground <= 300) {
 			m_camera->setPosition(lander->m_horizontalPosition, lander->m_verticalPosition - 150);
 			m_camera->setZoom(ZOOM_AMOUNT);
 		}
 	}
 	else {
+		/* If the lander gets to far away from the ground again, zoom out to full map */
 		if (lander->distance_to_ground >= 450) {
 			m_camera->setPosition(WINDOW_WIDTH, WINDOW_HEIGHT);
 			m_camera->setZoom(0.5f);

@@ -68,8 +68,4 @@ private:
 	KeyStatus m_key;
 };
 
-
-
-
-
 #endif // __AVANCEZ_LIB__

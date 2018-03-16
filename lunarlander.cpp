@@ -341,7 +341,7 @@ void LunarLander::InitLander() {
 	render->Create(system, lander, &game_objects, camera, "data/lander.bmp");
 
 	ParticleComponent* particles = new ParticleComponent();
-	particles->Create(system, lander, &game_objects, world, &bodies_tbd);
+	particles->Create(system, lander, &game_objects, world, &bodies_tbd, camera);
 
 	CameraBehaviourComponent* cameraBehaviour = new CameraBehaviourComponent();
 	cameraBehaviour->Create(system, lander, &game_objects, camera);

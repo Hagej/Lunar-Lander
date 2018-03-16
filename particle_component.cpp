@@ -1,8 +1,10 @@
 #include "particle_component.h"
 #include <time.h>
 
-void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2World* world, std::set<b2Body*>* bodies_tbd) {
+void ParticleComponent::Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2World* world, std::set<b2Body*>* bodies_tbd, Camera* camera) {
 	Component::Create(system, go, game_objects);
+
+	this->camera = camera;
 
 	sprite = system->createSprite("data/particle.bmp");
 	this->world = world;
@@ -49,7 +51,10 @@ void ParticleComponent::Update(float dt) {
 			bodies_tbd->insert(p->m_body);
 			p->m_enabled = false;
 		} else {
-			sprite->draw(p->m_body->GetPosition().x, WINDOW_HEIGHT - p->m_body->GetPosition().y, p->m_body->GetAngle());
+			float32 pos_x = p->m_body->GetPosition().x;
+			float32 pos_y = p->m_body->GetPosition().y;
+			camera->worldToScreen(&pos_x, &pos_y);
+			sprite->draw(pos_x, pos_y, p->m_body->GetAngle());
 		}
 	}
 	for (Particle* p : inactive) {

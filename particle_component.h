@@ -9,11 +9,13 @@
 #include "game_defs.h"
 #include "system_defs.h"
 #include "lander.h"
+#include "camera.h"
 
 class ParticleComponent : public Component {
 
 	b2World* world;
 	Sprite* sprite;
+	Camera* camera;
 
 	ObjectPool<Particle> particles;
 	std::set<Particle*> active_particles;
@@ -28,7 +30,7 @@ class ParticleComponent : public Component {
 
 public:
 
-	void Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2World* world, std::set<b2Body*>* bodies_tbd);
+	void Create(AvancezLib* system, GameObject* go, std::set<GameObject*>* game_objects, b2World* world, std::set<b2Body*>* bodies_tbd, Camera* camera);
 	void Update(float dt);
 
 private:

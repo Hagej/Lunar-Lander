@@ -23,8 +23,6 @@ public:
 	inline SDL_Rect getViewport() { return m_viewport; }
 	void draw(GameObject* go, Sprite* sprite);
 
-private:
-
 	void worldToScreen(float32* x, float32* y);
 
 };
