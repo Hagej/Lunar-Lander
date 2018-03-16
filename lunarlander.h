@@ -12,18 +12,16 @@
 #include "lander.h"
 #include "ground.h"
 
+/* Main class for the Lunar Lander game*/
 class LunarLander : public Game {
 
 	b2World * world;
 	CollisionCallback collision;
 
-	std::set<GameObject*> lander_gos;
-	std::set<b2Body*> bodies_tbd;
-	std::set<b2Joint*> joints_tbd;
-	b2Body* lander_core;
+	std::set<b2Body*> bodies_tbd;	// Bodies to be destroyed next update
+	std::set<b2Joint*> joints_tbd;	// Joints to be destroyed next update
+	b2Body* lander_core;			
 	b2Body* groundBody;
-
-	float32 distance_to_ground;
 
 	Lander* lander;
 	Ground* ground;

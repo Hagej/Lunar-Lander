@@ -11,8 +11,10 @@
 
 using namespace std;
 
+/* Variable for modifying game speed. Not used in Lunar Lander */
 float game_speed = 1.f;
 
+/* Method for checking FMOD errors */
 void fmodErrCheck(FMOD_RESULT result) {
 	if (result != FMOD_OK) {
 		printf("fmod error: %d - %s", result, FMOD_ErrorString(result));

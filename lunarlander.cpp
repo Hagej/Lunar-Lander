@@ -1,5 +1,6 @@
 #include "lunarlander.h"
 
+/* Constructor for the game Lunar Lander */
 void LunarLander::Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) {
 
 	Game::Create(system, fmod_studio);
@@ -7,9 +8,10 @@ void LunarLander::Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) 
 	InitWorld();
 	InitLander();	
 	
-	world->ClearForces();
+	world->ClearForces();	// Safety measure
 }
 
+/* The game loop. Updates the Box2D world, FMOD Studio and all the game objects. Clears the world of objects that are removed. */
 void LunarLander::Update(float dt) {
 	if (IsGameOver())
 		dt = 0.f;
@@ -21,7 +23,6 @@ void LunarLander::Update(float dt) {
 	}
 	
 	world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-	world->DrawDebugData();
 	fmod_studio->update();
 
 	for (auto go : game_objects)
@@ -37,18 +38,19 @@ void LunarLander::Update(float dt) {
 	bodies_tbd.clear();
 }
 
+/* Method that draws the ui of the game */
 void LunarLander::Draw() {
 	char msg[1024];
 	sprintf(msg, "Score: %d", score);
 	system->drawText(100, 32, msg);
 	if (lander->m_enabled) {
-		float angle = lander_core->GetAngle();
+		float angle = lander->GetBody()->GetAngle();
 		float x = cos(angle);
 		float y = sin(angle);
-		b2Vec2 vel = lander_core->GetLinearVelocity();
+		b2Vec2 vel = lander->GetBody()->GetLinearVelocity();
 		sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
 		system->drawText(500, 32, msg);
-		sprintf(msg, "Altitude: %d", (int)(lander->distance_to_ground));
+		sprintf(msg, "Altitude: %d", (int)(lander->GetAltitude()));
 		system->drawText(500, 64, msg);
 		sprintf(msg, "Horizontal speed: %d", (int)vel.x);
 		system->drawText(650, 32, msg);
@@ -69,54 +71,28 @@ void LunarLander::Draw() {
 	if (IsGameOver())
 	{
 		sprintf(msg, "*** G A M E  O V E R ***");
-		system->drawText(250, 8, msg);
+		system->drawText(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 100, msg);
 	}
 }
 
+/* Destroys the game instance and the Box2D world. */
 void LunarLander::Destroy() {
 	Game::Destroy();
 	delete world;
 }
 
-
-void AttachedBodies(b2Body* body, std::set<b2Body*>* bodies) {
-	if (body == NULL) {
-		return;
-	}
-	else if (body->GetJointList() == NULL) {
-		return;
-	}
-	else {
-		b2JointEdge* edge = body->GetJointList();
-		while (edge != NULL) {
-			if (bodies->find(edge->other) == bodies->end()) {
-				bodies->insert(edge->other);
-				AttachedBodies(edge->other, bodies);
-			}
-			edge = edge->next;
-		}
-	}
-}
-
-int InitAttachedBodies(b2Body* body) {
-	std::set<b2Body*> bodies;
-	bodies.insert(body);
-	AttachedBodies(body, &bodies);
-	return bodies.size();
-}
-
-
+/* Handles main game messages */
 void LunarLander::Receive(Message m) {
 	int parts_left;
 	switch (m)
 	{
-	case CRASH:
+	case CRASH:	// If the player crashes points are increased slightly and the next level starts
 		score += 10;
 		Restart();
 		break;
-	case LAND:
-		parts_left = InitAttachedBodies(lander->GetBody());
-		SDL_Log("Parts left: %d", parts_left);
+	case LAND:	// If the player lands points are increased depending on the amount of parts left on the lander. The next level starts
+		parts_left = lander->AttachedBodies();
+		LOG("Parts left: %d", parts_left);
 		score += 20 * parts_left;
 		restart = true;
 		break;
@@ -127,20 +103,21 @@ void LunarLander::Receive(Message m) {
 	}
 }
 
-
+// TODO: Start a new level each time
+/* Restarts the game */
 void LunarLander::Restart() {
-	for (auto go : game_objects)
+	for (auto go : game_objects) // Destroy all game objects
 		go->Destroy();
 	game_objects.clear();
 
 	b2Body* b = world->GetBodyList();
 	b2Body* next;
-	while (b != NULL) {
+	while (b != NULL) {			// Destroy all Box2D bodies
 		next = b->GetNext();
 		world->DestroyBody(b);
 		b = next;
 	}
-	delete world;
+	delete world;	// TODO: No need to destroy world? Just repopulate.
 	
 	InitWorld();
 	InitLander();
@@ -150,6 +127,7 @@ void LunarLander::Restart() {
 
 }
 
+// TODO: Wrap this in world class
 // Initialize Box2D world
 void LunarLander::InitWorld() { 
 	
@@ -193,6 +171,7 @@ void LunarLander::InitWorld() {
 	
 }
 
+// TODO: Wrap this in lander class
 // Initializes the Lander game objects and b2Bodies
 void LunarLander::InitLander() { 
 
@@ -334,9 +313,6 @@ void LunarLander::InitLander() {
 	const char* sprites[] = { "data/Lander_firing_01.bmp", "data/Lander_firing_02.bmp", "data/Lander_firing_03.bmp" };
 	int amount = 3;
 
-	/*LanderRenderComponent* render = new LanderRenderComponent();
-	render->Create(system, lander, &game_objects, "data/lander.bmp", sprites, amount);*/
-
 	RenderComponent* render = new RenderComponent();
 	render->Create(system, lander, &game_objects, camera, "data/lander.bmp");
 
@@ -353,7 +329,5 @@ void LunarLander::InitLander() {
 	lander->AddComponent(cameraBehaviour);
 	lander->AddReceiver(this);
 	game_objects.insert(lander);
-
-
 }
 

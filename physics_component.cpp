@@ -5,6 +5,7 @@ void PhysicsComponent::Create(AvancezLib* system, GameObject* go, std::set<GameO
 	m_body = body;
 }
 
+/* Sets the current position of the game object to be the same as the b2Body */
 void PhysicsComponent::Update(float dt) {
 
 	b2Vec2 position = m_body->GetPosition();

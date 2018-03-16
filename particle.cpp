@@ -1,5 +1,6 @@
 #include "particle.h"
 
+/* Initiates a particle with a specified life time*/
 void Particle::Init(float life) {
 	GameObject::Init();
 

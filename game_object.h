@@ -16,11 +16,11 @@ protected:
 
 
 public:
-	double m_horizontalPosition;
-	double m_verticalPosition;
-	float m_angle; // angle of rotation in degrees
-	bool m_enabled;
-	b2Vec2 m_size;
+	double m_horizontalPosition;	// x position
+	double m_verticalPosition;		// y position
+	float m_angle;					// angle of rotation in degrees
+	bool m_enabled;					
+	b2Vec2 m_size;					// Size of Sprite being drawn (Not neccesarily same as bounding box)
 
 	virtual ~GameObject();
 

@@ -2,6 +2,7 @@
 #include "game_object.h"
 #include "avancezlib.h"
 
+/* Default create function of the Component class */
 void Component::Create(AvancezLib * system, GameObject * go, std::set<GameObject*>* game_objects)
 {
 	m_go = go;
@@ -11,6 +12,7 @@ void Component::Create(AvancezLib * system, GameObject * go, std::set<GameObject
 
 void RenderComponent::Create(AvancezLib * system, GameObject * go, std::set<GameObject*>* game_objects, Camera* camera, const char * sprite_name)
 {
+	LOG("RenderComponent::Create");
 	Component::Create(system, go, game_objects);
 
 	m_sprite = system->createSprite(sprite_name);
@@ -23,7 +25,7 @@ void RenderComponent::Update(float dt)
 		return;
 
 	if (m_sprite)
-		m_camera->draw(m_go, m_sprite);
+		m_camera->Draw(m_go, m_sprite);
 }
 
 void RenderComponent::Destroy()

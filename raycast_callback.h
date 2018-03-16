@@ -2,14 +2,16 @@
 
 #include "Box2D\Box2D.h"
 
+/* Callback class for raycasts */
 class RaysCastCallback : public b2RayCastCallback
 {
 public:
 	RaysCastCallback() : m_fixture(NULL) {}
 
+	/* Returns the nearest point of intersection on the ground object */
 	float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction) {
 		if (fixture->GetBody()->GetUserData() == (void*)-1) {
-			fraction = 0;
+			fraction = 0;	// Stops when the ground (user data -1) has been found
 		} else {
 			fraction = 1;
 		}

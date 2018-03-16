@@ -9,7 +9,7 @@
 /* Component for updating the position of the game object to where the box2D body is located. */
 class PhysicsComponent : public Component {
 
-	b2Body* m_body;
+	b2Body* m_body;	// The body of the game object
 
 public:
 	virtual void Create(AvancezLib * system, GameObject *go, std::set<GameObject*>* gameObjects, b2Body *body);

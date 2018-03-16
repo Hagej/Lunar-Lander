@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "system_defs.h"
 
 template <class T>
 class ObjectPool
@@ -28,27 +29,25 @@ public:
 
 	void Deallocate()
 	{
-#if LOG
-		SDL_Log("ObjectPool::Deallocating ");
-#endif
+		LOG("ObjectPool::Deallocating ");
 		for (auto it : m_pool)
 			delete it;
 	}
 
 	~ObjectPool()
 	{
-#if LOG
-		SDL_Log("ObjectPool::~ObjectPool");
-#endif
+		LOG("ObjectPool::~ObjectPool");
 		Deallocate();
 	}
 
 	T* FirstAvailable()
 	{
-		for (auto it : m_pool)
-			if (!(*it).m_enabled)
-				return it;
-
+		for (auto it : m_pool) {
+			if (!(*it).m_enabled) {
+				return it;	
+			}
+		}
+			
 		// if it reaches this point, there is no available object in the pool
 		return NULL;
 	}

@@ -34,25 +34,25 @@ protected:
 
 public:
 
-	virtual void Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) {	// Inits the system and sound
-#if LOG
-		SDL_Log("Game::Create");
-#endif
+	/* Inits the main system, sound system and the main camera of the game */
+	virtual void Create(AvancezLib* system, FMOD::Studio::System* fmod_studio) {	
+		LOG("Game::Create");
 		this->system = system;
 		this->fmod_studio = fmod_studio;
 		camera = new Camera(960, 540, 960, 540);
 		score = 0;
-
 	}
 
+	/* Enables all game objects in the game */
 	virtual void Init() {
 		for (auto go : game_objects)
 			go->Init();
 
-		m_enabled = true;
+		//m_enabled = true;		Redundant? 
 		game_over = false;
 	}
 
+	/* Default update function of the game class */
 	virtual void Update(float dt)
 	{
 		if (IsGameOver())
@@ -64,8 +64,10 @@ public:
 			go->Update(dt);
 	}
 
+	/* Default method for drawing the UI of the game */
 	virtual void Draw() {}
 
+	/* Default recieve method of the game. Handles game altering messages such as GAME_OVER */
 	virtual void Receive(Message m) {
 		if (m == GAME_OVER)
 			game_over = true;
@@ -75,11 +77,9 @@ public:
 
 	unsigned int getScore() { return score; }
 
+	/* Default destroy method. Destroys all game objects and the sound system */
 	virtual void Destroy() {
-#if LOG
-		SDL_Log("Game::Destroy");
-#endif
-
+		LOG("Game::Destroy");
 		for (auto go : game_objects)
 			go->Destroy();
 
