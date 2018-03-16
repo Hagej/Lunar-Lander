@@ -1,6 +1,7 @@
 #pragma once
 
 #include "camera.h"
+#include "game_object.h"
 
 Camera::Camera(int x, int y, int w, int h) {
 	m_viewport.x = x;
@@ -18,8 +19,8 @@ void Camera::pan(const int dx, const int dy) {
 
 void Camera::setZoom(const float zoom) {
 	m_zoom = zoom;
-	m_viewport.w = WINDOW_WIDTH * m_zoom;
-	m_viewport.h = WINDOW_HEIGHT * m_zoom;
+	m_viewport.w = (WINDOW_WIDTH/m_zoom)/2;
+	m_viewport.h = (WINDOW_HEIGHT/m_zoom)/2;
 }
 
 void Camera::setPosition(const b2Vec2 position) {
@@ -49,16 +50,18 @@ void Camera::draw(GameObject* go, Sprite* sprite) {
 	b2Vec2 pos;
 	pos.x = go->m_horizontalPosition;
 	pos.y = go->m_verticalPosition;
-	worldToScreen(&pos.x, &pos.y);
-	pos.x -= width / 2.0f;
-	pos.y -= height / 2.0f;
-	//SDL_Log("Position: %f, %f", pos.x, pos.y);
-
-	if (pos.x + width*m_zoom < (m_viewport.x - m_viewport.w) 
-		|| pos.x > (m_viewport.x + m_viewport.w)
-		|| pos.y + height*m_zoom < (m_viewport.y - m_viewport.h)
-		|| pos.y > (m_viewport.y + m_viewport.h)) {
+	if (pos.x + width/2 < (m_viewport.x - m_viewport.w)
+		|| pos.x - width/2 > (m_viewport.x + m_viewport.w)
+		|| pos.y + height/2 < (m_viewport.y - m_viewport.h)
+		|| pos.y - height/2 > (m_viewport.y + m_viewport.h)) {
 		return;
 	}
+	worldToScreen(&pos.x, &pos.y);
+	pos.x -= width / 2.0f;				// To get the upper right corner of the object
+	pos.y -= height / 2.0f;				// Subtract as SDL has its origo in the upper left corner
+
+	
 	sprite->draw(pos.x, pos.y, go->m_angle, go->m_size.x * m_zoom, go->m_size.y * m_zoom);
 }
+
+

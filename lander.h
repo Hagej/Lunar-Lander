@@ -3,6 +3,7 @@
 #include "Box2D\Box2D.h"
 #include "component.h"
 #include "game_object.h"
+#include "raycast_callback.h"
 
 class Lander : public GameObject {
 
@@ -10,8 +11,9 @@ class Lander : public GameObject {
 
 	bool is_firing = false;
 
-
 public:
+
+	float distance_to_ground;
 
 	void Create(b2Vec2 size, b2Body* body);
 
@@ -25,6 +27,8 @@ public:
 
 class LanderBehaviourComponent : public Component {
 
+	RaysCastCallback raycast;
+	
 	float hover_time;
 
 public:

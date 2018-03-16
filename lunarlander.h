@@ -7,6 +7,7 @@
 
 #include "physics_component.h"
 #include "particle_component.h"
+#include "camera_behaviour_component.h"
 
 #include "lander.h"
 #include "ground.h"
@@ -15,7 +16,6 @@ class LunarLander : public Game {
 
 	b2World * world;
 	CollisionCallback collision;
-	RaysCastCallback raycast;
 
 	std::set<GameObject*> lander_gos;
 	std::set<b2Body*> bodies_tbd;

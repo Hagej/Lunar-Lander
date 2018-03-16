@@ -19,11 +19,6 @@ void LunarLander::Update(float dt) {
 		Restart();
 		return;
 	}
-
-	world->RayCast(&raycast, lander->GetBody()->GetPosition(), b2Vec2(lander->GetBody()->GetPosition().x, 0));
-	b2Vec2 ground_intersect = raycast.m_point;
-	b2Vec2 lander_pos = lander->GetBody()->GetPosition();
-	distance_to_ground = lander_pos.y - ground_intersect.y;
 	
 	world->Step(PHYSICS_TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 	world->DrawDebugData();
@@ -53,7 +48,7 @@ void LunarLander::Draw() {
 		b2Vec2 vel = lander_core->GetLinearVelocity();
 		sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
 		system->drawText(500, 32, msg);
-		sprintf(msg, "Altitude: %d", (int)(distance_to_ground));
+		sprintf(msg, "Altitude: %d", (int)(lander->distance_to_ground));
 		system->drawText(500, 64, msg);
 		sprintf(msg, "Horizontal speed: %d", (int)vel.x);
 		system->drawText(650, 32, msg);
@@ -348,13 +343,14 @@ void LunarLander::InitLander() {
 	ParticleComponent* particles = new ParticleComponent();
 	particles->Create(system, lander, &game_objects, world, &bodies_tbd);
 
-	
+	CameraBehaviourComponent* cameraBehaviour = new CameraBehaviourComponent();
+	cameraBehaviour->Create(system, lander, &game_objects, camera);
 
-	
 	lander->AddComponent(physics);
 	lander->AddComponent(behaviour);
 	lander->AddComponent(render);
 	lander->AddComponent(particles);
+	lander->AddComponent(cameraBehaviour);
 	lander->AddReceiver(this);
 	game_objects.insert(lander);
 

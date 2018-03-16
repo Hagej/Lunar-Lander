@@ -30,4 +30,7 @@
 #define PARTICLE_MAX_VELOCITY 30
 
 /* Win conditions */
-#define WIN_TIME 3.0f
+#define WIN_TIME 2.0f
+
+/* Camera definitions */
+#define ZOOM_AMOUNT 1.2f

@@ -38,6 +38,12 @@ void LanderBehaviourComponent::Update(float dt) {
 		lander->Crash();
 		return;
 	}
+
+	body->GetWorld()->RayCast(&raycast, body->GetPosition(), b2Vec2(body->GetPosition().x, 0));
+	b2Vec2 ground_intersect = raycast.m_point;
+	b2Vec2 lander_pos = lander->GetBody()->GetPosition();
+	lander->distance_to_ground = lander_pos.y - ground_intersect.y;
+
 	if(body->GetLinearVelocity().LengthSquared() == 0) {
 		hover_time += dt;
 		if (hover_time > WIN_TIME) {

@@ -2,7 +2,6 @@
 
 #include <set>
 #include "object_pool.h"
-#include "camera.h"
 
 class GameObject;
 class AvancezLib;
@@ -26,6 +25,8 @@ public:
 	virtual void Destroy() {}
 };
 
+
+#include "camera.h"
 
 class RenderComponent : public Component
 {
