@@ -120,13 +120,19 @@ void LunarLander::Restart() {
 		go->Destroy();
 	game_objects.clear();
 
-
 	level_handler.ClearWorld();
-	level_handler.GenerateLevel(1920, 1080);
+	level_handler.GenerateLevel(1920, 500);
+
+	LevelComponent* levelComponent = new LevelComponent();
+	levelComponent->Create(system, &level_handler, &game_objects, camera);
+	level_handler.AddComponent(levelComponent);
+
+	game_objects.insert(&level_handler);
+
 	camera->SetPosition(WINDOW_WIDTH, WINDOW_HEIGHT);
 	camera->SetZoom(0.5f);
+	
 	InitLander();
-
 	for (auto go : game_objects)
 		go->Init();
 

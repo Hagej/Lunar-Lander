@@ -48,7 +48,7 @@ public:
 		for (auto go : game_objects)
 			go->Init();
 
-		//m_enabled = true;		Redundant? 
+		m_enabled = true;
 		game_over = false;
 	}
 

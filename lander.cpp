@@ -11,11 +11,6 @@
 
 void Lander::Destroy() {
 	LOG("Lander::Destroy")
-	b2World* world = m_body->GetWorld();
-	world->DestroyBody(m_body);
-	for (b2Body* b : m_legs) {
-		world->DestroyBody(b);
-	}
 	GameObject::~GameObject();
 }
 
