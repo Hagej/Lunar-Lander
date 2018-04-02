@@ -12,8 +12,8 @@
 #define SLICE_MAX_WIDTH 30
 #define SLICE_MIN_HEIGHT 5
 #define SLICE_MAX_HEIGHT 50
-#define GOAL_MIN_WIDTH 76
-#define GOAL_MAX_WIDTH 76 * 3
+#define GOAL_MIN_WIDTH 45
+#define GOAL_MAX_WIDTH 76 * 2
 
 /* User data */
 #define GROUND -1
@@ -31,8 +31,10 @@
 #define LANDER_RESTITUTION 0
 #define LANDER_FRICTION 0.3f
 #define LANDER_ROTATION_SPEED 1.0f
-#define LANDER_CRASH_THRESHOLD 60.0f
-#define LANDER_BREAK_THRESHOLD 80.0f
+#define LANDER_CRASH_THRESHOLD 50.0f
+#define LANDER_BREAK_THRESHOLD 60.0f
+#define LANDER_START_FUEL 2000.0f
+#define LANDER_FUEL_COST 0.1f
 
 
 /* Particle system definitions */

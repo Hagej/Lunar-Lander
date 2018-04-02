@@ -22,6 +22,7 @@ void Lander::Create(b2Vec2 size, b2World* world) {
 
 	InitBody(world, b2Vec2(LANDER_START_X, LANDER_START_Y));
 
+	m_fuel = LANDER_START_FUEL;
 }
 
 /* Method for when the lander has crashed */
@@ -34,6 +35,16 @@ void Lander::Crash() {
 /* Method for when the lander has landed successfully */
 void Lander::Land() {
 	Send(LAND);
+}
+
+void Lander::ReduceFuel(const float amount) {
+	m_fuel -= amount;
+}
+
+void Lander::OutOfFuel() {
+	Send(GAME_OVER);
+	this->m_enabled = false;
+	GameObject::Destroy();
 }
 
 /* Recursive method for checking the amount of bodies attached to the lander */
@@ -196,6 +207,12 @@ void LanderBehaviourComponent::Update(float dt) {
 	}
 
 	Lander* lander = (Lander *)m_go;
+
+	if (lander->GetFuel() <= 0) {
+		lander->OutOfFuel();
+		return;
+	}
+
 	b2Body* body = lander->GetBody();
 
 	b2Vec2 lander_pos = body->GetPosition();
@@ -217,6 +234,7 @@ void LanderBehaviourComponent::Update(float dt) {
 	lander->SetFiring(false);
 	if (keys.fire) {
 		lander->SetFiring(true);
+		lander->ReduceFuel(LANDER_FUEL_COST);
 
 		// Get the oposite direction of the lander
 		float32 angle = body->GetAngle() + M_PI/2;

@@ -59,6 +59,8 @@ void LunarLander::Draw() {
 		float x = cos(angle);
 		float y = sin(angle);
 		b2Vec2 vel = lander->GetBody()->GetLinearVelocity();
+		sprintf(msg, "Fuel: %d", (int)lander->GetFuel());
+		system->drawText(100, 64, msg);
 		sprintf(msg, "Angle: %d", (int)(angle * 180.0f / 3.14f));
 		system->drawText(500, 32, msg);
 		sprintf(msg, "Altitude: %d", (int)(lander->GetAltitude()));
@@ -150,9 +152,6 @@ void LunarLander::InitLander() {
 
 	LanderBehaviourComponent* behaviour = new LanderBehaviourComponent();
 	behaviour->Create(system, lander, &game_objects);
-
-	/*const char* sprites[] = { "data/Lander_firing_01.bmp", "data/Lander_firing_02.bmp", "data/Lander_firing_03.bmp" };
-	int amount = 3;*/
 
 	RenderComponent* render = new RenderComponent();
 	render->Create(system, lander, &game_objects, camera, "data/lander.bmp");

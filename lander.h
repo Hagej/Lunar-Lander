@@ -12,6 +12,7 @@ class Lander : public GameObject {
 
 	bool is_firing = false;		// TODO: Change to status enum instead?
 	float m_altitude;
+	float m_fuel;
 
 
 public:
@@ -21,11 +22,17 @@ public:
 	inline b2Body* GetBody() { return m_body; }
 	inline std::set<b2Body*> GetLegs() { return m_legs; }
 	inline float GetAltitude() { return m_altitude; }
+
 	inline void SetAltitude(float altitude) { m_altitude = altitude; }
 	inline bool IsFiring() { return is_firing; }
 	inline void SetFiring(bool firing) { is_firing = firing; }
+
+	inline float GetFuel() { return m_fuel; }
+	void ReduceFuel(float amount);
+
 	void Land();
 	void Crash();
+	void OutOfFuel();
 
 	void Destroy();
 
