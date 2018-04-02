@@ -26,6 +26,8 @@ class LunarLander : public Game {
 
 	Lander* lander;
 
+	float fuel_left;
+
 	bool restart = false;
 
 public:

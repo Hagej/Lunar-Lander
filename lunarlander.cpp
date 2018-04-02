@@ -97,16 +97,19 @@ void LunarLander::Destroy() {
 /* Handles main game messages */
 void LunarLander::Receive(Message m) {
 	int parts_left;
+
 	switch (m)
 	{
 	case CRASH:	// If the player crashes points are increased slightly and the next level starts
 		score += 10;
+		fuel_left = 0; 
 		restart = true;
 		break;
 	case LAND:	// If the player lands points are increased depending on the amount of parts left on the lander. The next level starts
 		parts_left = lander->AttachedBodies();
 		LOG("Parts left: %d", parts_left);
 		score += 20 * parts_left;
+		fuel_left = 100;
 		restart = true;
 		break;
 	case GAME_OVER:
@@ -118,6 +121,7 @@ void LunarLander::Receive(Message m) {
 
 /* Restarts the game */
 void LunarLander::Restart() {
+	fuel_left += lander->GetFuel();
 	for (auto go : game_objects) // Destroy all game objects
 		go->Destroy();
 	game_objects.clear();
@@ -135,6 +139,7 @@ void LunarLander::Restart() {
 	camera->SetZoom(0.5f);
 	
 	InitLander();
+	lander->SetFuel(fuel_left);
 	for (auto go : game_objects)
 		go->Init();
 

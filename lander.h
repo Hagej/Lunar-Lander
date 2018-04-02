@@ -28,6 +28,7 @@ public:
 	inline void SetFiring(bool firing) { is_firing = firing; }
 
 	inline float GetFuel() { return m_fuel; }
+	inline void SetFuel(float fuel) { m_fuel = fuel; }
 	void ReduceFuel(float amount);
 
 	void Land();
